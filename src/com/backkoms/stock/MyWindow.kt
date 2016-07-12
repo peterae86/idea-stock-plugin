@@ -12,12 +12,16 @@ import org.jfree.chart.ChartPanel
 import org.jfree.chart.StandardChartTheme
 import org.jfree.chart.plot.DefaultDrawingSupplier
 import org.jfree.chart.plot.PlotOrientation
+import org.jfree.chart.plot.XYPlot
+import org.jfree.data.time.TimeSeriesCollection
+import org.jfree.data.xy.XYDataItem
 import org.jfree.data.xy.XYDataset
 import org.jfree.data.xy.XYSeries
 import org.jfree.data.xy.XYSeriesCollection
 import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import java.util.*
 import javax.swing.*
 
 /**
@@ -61,6 +65,7 @@ class MyWindow : StockWindow, ToolWindowFactory {
         theme.gridBandAlternatePaint = Color(255, 255, 255, 40)
         ChartFactory.setChartTheme(theme);
         var mCollection = GetCollection();
+        ChartFactory.createTimeSeriesChart()
         var mChart = ChartFactory.createXYLineChart(
                 "折线图",
                 "X",
@@ -77,27 +82,19 @@ class MyWindow : StockWindow, ToolWindowFactory {
 
     private fun GetCollection(): XYDataset {
         println("therr")
-        var mCollection = XYSeriesCollection();
+        var mCollection = TimeSeriesCollection();
         var mSeriesFirst = XYSeries("First");
-        mSeriesFirst.add(1.0, 1.0);
-        mSeriesFirst.add(2, 4);
-        mSeriesFirst.add(3, 3);
-        mSeriesFirst.add(4, 5);
-        mSeriesFirst.add(5, 5);
-        mSeriesFirst.add(6, 7);
-        mSeriesFirst.add(7, 7);
-        mSeriesFirst.add(8, 8);
-        var mSeriesSecond = XYSeries("Second");
-        mSeriesSecond.add(1.0, 5);
-        mSeriesSecond.add(2, 7);
-        mSeriesSecond.add(3, 6);
-        mSeriesSecond.add(4, 8);
-        mSeriesSecond.add(5, 4);
-        mSeriesSecond.add(6, 4);
-        mSeriesSecond.add(7, 2);
-        mSeriesSecond.add(8, 1.0);
+        Thread() {
+            run {
+                var random = Random()
+                var i = 0;
+                while (true) {
+                    mSeriesFirst.add(XYDataItem(i++, random.nextInt(111)))
+                    Thread.sleep(1000)
+                }
+            }
+        }.start()
         mCollection.addSeries(mSeriesFirst);
-        mCollection.addSeries(mSeriesSecond);
         return mCollection;
     }
 
