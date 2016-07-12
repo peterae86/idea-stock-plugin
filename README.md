@@ -1,0 +1,2 @@
+# idea-stock-plugin
+test
