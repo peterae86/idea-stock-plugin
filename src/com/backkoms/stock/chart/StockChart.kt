@@ -29,12 +29,12 @@ fun createTimeSeriesChart(title: String, timeSeriesDataSet: TimeseriesDataset, s
     val plot = TimeseriesPlot(timeSeriesDataSet, segmentedTimeline, timeSeriesArea)
     val chart = JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot.timeseriesPlot, createLegend)
     chart.backgroundPaint = Color(60, 63, 65)
+
     return chart
 }
 
 fun createChart(): ChartPanel {
-    val timeline = SegmentedTimeline(
-            SegmentedTimeline.MINUTE_SEGMENT_SIZE, 1351, 89)
+    val timeline = SegmentedTimeline(SegmentedTimeline.MINUTE_SEGMENT_SIZE, 1351, 89)
     timeline.startTime = SegmentedTimeline.firstMondayAfter1900() + 780 * SegmentedTimeline.MINUTE_SEGMENT_SIZE
     var data: MutableList<TimeseriesItem> = ArrayList();
     var time = System.currentTimeMillis();
