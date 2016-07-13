@@ -35,47 +35,47 @@ class MyWindow : StockWindow, ToolWindowFactory {
     }
 
 
-//    fun createChart(): ChartPanel {
-//        var theme: StandardChartTheme = StandardChartTheme.createDarknessTheme() as StandardChartTheme;
-//        theme.titlePaint = Color.lightGray
-//        theme.subtitlePaint = Color.lightGray
-//        theme.legendBackgroundPaint = backgroundColor
-//        theme.legendItemPaint = Color.lightGray
-//        theme.chartBackgroundPaint = backgroundColor
-//        theme.plotBackgroundPaint = backgroundColor
-//        theme.plotOutlinePaint = Color.lightGray
-//        theme.baselinePaint = Color.white
-//        theme.crosshairPaint = Color.red
-//        theme.labelLinkPaint = Color.lightGray
-//        theme.tickLabelPaint = Color.lightGray
-//        theme.axisLabelPaint = Color.lightGray
-//        theme.shadowPaint = Color.darkGray
-//        theme.itemLabelPaint = Color.lightGray
-//        theme.drawingSupplier = DefaultDrawingSupplier(
-//                arrayOf<Paint>(Color.lightGray),
-//                arrayOf<Paint>(Color.decode("0x0036CC"), Color.decode("0x0036CC")),
-//                arrayOf<Stroke>(BasicStroke(2.0f)),
-//                arrayOf<Stroke>(BasicStroke(0.5f)),
-//                DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE)
-//        theme.wallPaint = Color.darkGray
-//        theme.errorIndicatorPaint = Color.lightGray
-//        theme.gridBandPaint = Color(255, 255, 255, 20)
-//        theme.gridBandAlternatePaint = Color(255, 255, 255, 40)
-//        ChartFactory.setChartTheme(theme);
-//        var mCollection = GetCollection();
-//        var mChart = ChartFactory.createXYLineChart(
-//                "折线图",
-//                "X",
-//                "Y",
-//                mCollection,
-//                PlotOrientation.VERTICAL,
-//                true,
-//                true,
-//                false);
-//        var dd = ChartPanel(mChart)
-//        dd.isVisible = true;
-//        return dd;
-//    }
+    fun createChart1(): ChartPanel {
+        var theme: StandardChartTheme = StandardChartTheme.createDarknessTheme() as StandardChartTheme;
+        theme.titlePaint = Color.lightGray
+        theme.subtitlePaint = Color.lightGray
+        theme.legendBackgroundPaint = backgroundColor
+        theme.legendItemPaint = Color.lightGray
+        theme.chartBackgroundPaint = backgroundColor
+        theme.plotBackgroundPaint = backgroundColor
+        theme.plotOutlinePaint = Color.lightGray
+        theme.baselinePaint = Color.white
+        theme.crosshairPaint = Color.red
+        theme.labelLinkPaint = Color.lightGray
+        theme.tickLabelPaint = Color.lightGray
+        theme.axisLabelPaint = Color.lightGray
+        theme.shadowPaint = Color.darkGray
+        theme.itemLabelPaint = Color.lightGray
+        theme.drawingSupplier = DefaultDrawingSupplier(
+                arrayOf<Paint>(Color.lightGray),
+                arrayOf<Paint>(Color.decode("0x0036CC"), Color.decode("0x0036CC")),
+                arrayOf<Stroke>(BasicStroke(2.0f)),
+                arrayOf<Stroke>(BasicStroke(0.5f)),
+                DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE)
+        theme.wallPaint = Color.darkGray
+        theme.errorIndicatorPaint = Color.lightGray
+        theme.gridBandPaint = Color(255, 255, 255, 20)
+        theme.gridBandAlternatePaint = Color(255, 255, 255, 40)
+        ChartFactory.setChartTheme(theme);
+        var mCollection = GetCollection();
+        var mChart = ChartFactory.createXYLineChart(
+                "折线图",
+                "X",
+                "Y",
+                mCollection,
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false);
+        var dd = ChartPanel(mChart)
+        dd.isVisible = true;
+        return dd;
+    }
 
     private fun GetCollection(): XYDataset {
 
