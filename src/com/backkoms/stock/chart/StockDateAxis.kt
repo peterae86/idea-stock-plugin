@@ -19,8 +19,7 @@ import java.util.*
  */
 class StockDateAxis(baseDate: Date, dateFormat: DateFormat) : DateAxis() {
     private val ticks = ArrayList<LogicDateTick>()
-    var formatter: DateFormat? = null
-        private set
+    var formatter: DateFormat = dateFormat
     private val calendar = Calendar.getInstance()
     private var baseDate: Date = baseDate
     private var dateFormat: DateFormat = dateFormat
@@ -38,7 +37,7 @@ class StockDateAxis(baseDate: Date, dateFormat: DateFormat) : DateAxis() {
         var var2: Date? = null
 
         try {
-            var2 = this.formatter!!.parse(var1)
+            var2 = this.formatter.parse(var1)
         } catch (var6: ParseException) {
             throw IllegalArgumentException("Parse time failed: \'" + var1 + "\'")
         }
