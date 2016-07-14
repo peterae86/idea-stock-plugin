@@ -2,6 +2,7 @@ package com.backkoms.stock.chart
 
 import org.jfree.chart.ChartPanel
 import org.jfree.chart.JFreeChart
+import org.jfree.chart.StandardChartTheme
 import org.jfree.chart.axis.SegmentedTimeline
 import org.jfree.data.Range
 import org.jfree.data.time.Minute
@@ -53,25 +54,14 @@ fun createTimeSeriesChart(title: String, timeSeriesDataSet: StockDateSet, timeSe
     val timeline = SegmentedTimeline(SegmentedTimeline.MINUTE_SEGMENT_SIZE, 1350, 90)
     timeline.startTime = SegmentedTimeline.firstMondayAfter1900() + 780 * SegmentedTimeline.MINUTE_SEGMENT_SIZE
     stockAxis.timeline = timeline
-    val plot = test(stockAxis, timeSeriesArea, timeSeriesDataSet)
+    val plot = test(stockAxis, StockTimeSeriesArea(), timeSeriesDataSet)
     val chart = JFreeChart(title, JFreeChart.DEFAULT_TITLE_FONT, plot, createLegend)
     chart.backgroundPaint = Color(60, 63, 65)
 
     return chart
 }
 
-fun createChart(): ChartPanel {
-    ////    var data: MutableList<TimeseriesItem> = ArrayList();
-    ////    var time = System.currentTimeMillis();
-    ////    var random = Random();
-    ////    for (i in 0..10000) {
-    ////        data.add(TimeseriesItem(Date(time + i * 60000), random.nextDouble() + i / 100, random.nextInt(100) * 1.0))
-    ////    }
-    ////
-    ////
-    ////    val dataset = TimeseriesDataset(Minute::class.java, 1,
-    ////            timeline, true)
-    //    dataset.addDataItems(data)
+fun createChart(theme: StandardChartTheme): ChartPanel {
     var random = Random();
     var dataSet2 = StockDateSet()
     var time = LocalDateToUdate(LocalDate.now().atTime(9, 30)).time;

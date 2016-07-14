@@ -22,32 +22,23 @@ import java.awt.Color
 
 private val backgroundColor: Color = Color(60, 63, 65)
 
-fun test(var2: StockDateAxis, timeseriesArea: TimeseriesArea, dataSet: StockDateSet): CombinedDomainXYPlot {
+fun test(var2: StockDateAxis, timeseriesArea: StockTimeSeriesArea, dataSet: StockDateSet): CombinedDomainXYPlot {
     val var3 = CombinedDomainXYPlot(var2)
     var3.gap = timeseriesArea.gap
     var3.orientation = timeseriesArea.orientation
     var3.domainAxis = var2
     var3.domainAxisLocation = timeseriesArea.dateAxisLocation
-    if (timeseriesArea.priceWeight <= 0 && timeseriesArea.volumeWeight <= 0) {
-        throw IllegalArgumentException("Illegal weight value: priceWeight=" + timeseriesArea.priceWeight + ", volumeWeight=" + timeseriesArea.volumeWeight)
-    } else {
-        var var4: XYPlot
-        if (timeseriesArea.priceWeight > 0) {
-            var4 = createPricePlot(timeseriesArea, dataSet)
-            var3.add(var4, timeseriesArea.priceWeight)
-        }
+    var var4: XYPlot
+    var4 = createPricePlot(timeseriesArea, dataSet)
+    var3.add(var4, timeseriesArea.priceWeight)
+    var4 = createVolumePlot(timeseriesArea, dataSet)
+    var3.add(var4, timeseriesArea.volumeWeight)
+    return var3
 
-        if (timeseriesArea.volumeWeight > 0) {
-            var4 = createVolumePlot(timeseriesArea, dataSet)
-            var3.add(var4, timeseriesArea.volumeWeight)
-        }
-
-        return var3
-    }
 }
 
-private fun createPricePlot(timeseriesArea: TimeseriesArea, dataSet: StockDateSet): XYPlot {
-    val var1 = timeseriesArea.priceArea
+private fun createPricePlot(var1: StockTimeSeriesArea, dataSet: StockDateSet): XYPlot {
+
 
     //    if (var1.isAverageVisible()) {
     //        var2.addSeries(dataSet.getAverageTimeSeries().getTimeSeries())
@@ -62,8 +53,8 @@ private fun createPricePlot(timeseriesArea: TimeseriesArea, dataSet: StockDateSe
     var4.autoRangeMinimumSize = 0.001;
     var4.tickUnit = NumberTickUnit(0.01);
     val var5 = XYLineAndShapeRenderer(true, false)
-//    var5.setSeriesPaint(0, var1.priceColor)
-//    var5.setSeriesPaint(1, var1.averageColor)
+    //    var5.setSeriesPaint(0, var1.priceColor)
+    //    var5.setSeriesPaint(1, var1.averageColor)
     val var6 = StockRateAxis(0.0, 20.0, -20.0)
     var6.tickLabelPaint = Color.white
     var6.labelPaint = Color.white
@@ -76,26 +67,24 @@ private fun createPricePlot(timeseriesArea: TimeseriesArea, dataSet: StockDateSe
     var7.backgroundPaint = backgroundColor
     var7.orientation = var1.orientation
     var7.rangeAxisLocation = var1.priceAxisLocation
-//    if (var1.isRateVisible) {
-        var7.setRangeAxis(1, var6)
-        var7.setRangeAxisLocation(1, var1.rateAxisLocation)
-        var7.setDataset(1, null)
-        var7.mapDatasetToRangeAxis(1, 1)
-//    }
-//
-//    if (var1.isMarkCentralValue) {
-//        val var8 = var3.centralValue
-//        if (var8 != null) {
-//            var7.addRangeMarker(ValueMarker(var8.toDouble(), var1.centralPriceColor, BasicStroke()))
-//        }
-//    }
+    //    if (var1.isRateVisible) {
+    var7.setRangeAxis(1, var6)
+    var7.setRangeAxisLocation(1, var1.rateAxisLocation)
+    var7.setDataset(1, null)
+    var7.mapDatasetToRangeAxis(1, 1)
+    //    }
+    //
+    //    if (var1.isMarkCentralValue) {
+    //        val var8 = var3.centralValue
+    //        if (var8 != null) {
+    //            var7.addRangeMarker(ValueMarker(var8.toDouble(), var1.centralPriceColor, BasicStroke()))
+    //        }
+    //    }
 
     return var7
 }
 
-private fun createVolumePlot(timeseriesArea: TimeseriesArea, dataSet: StockDateSet): XYPlot {
-    val var1 = timeseriesArea.volumeArea
-    val var2 = var1.logicVolumeAxis
+private fun createVolumePlot(var1: StockTimeSeriesArea, dataSet: StockDateSet): XYPlot {
     val var3 = NumberAxis()
     var3.labelPaint = Color.white
     var3.tickLabelPaint = Color.white
