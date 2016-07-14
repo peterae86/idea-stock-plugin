@@ -19,6 +19,7 @@ import java.awt.Color
  */
 
 private val backgroundColor: Color = Color(60, 63, 65)
+
 fun test(var2: StockDateAxis, timeseriesArea: TimeseriesArea, dataSet: StockDateSet): CombinedDomainXYPlot {
     val var3 = CombinedDomainXYPlot(var2)
     var3.gap = timeseriesArea.gap
@@ -52,6 +53,8 @@ private fun createPricePlot(timeseriesArea: TimeseriesArea, dataSet: StockDateSe
 
     val var3 = var1.logicPriceAxis
     val var4 = TimeseriesNumberAxis(var3.logicTicks)
+    var4.tickLabelPaint = Color.white
+    var4.labelPaint = Color.white
     val var5 = XYLineAndShapeRenderer(true, false)
     var4.upperBound = var3.upperBound
     var4.lowerBound = var3.lowerBound
@@ -85,6 +88,8 @@ private fun createVolumePlot(timeseriesArea: TimeseriesArea, dataSet: StockDateS
     val var1 = timeseriesArea.volumeArea
     val var2 = var1.logicVolumeAxis
     val var3 = TimeseriesNumberAxis(var2.logicTicks)
+    var3.labelPaint = Color.white
+    var3.tickLabelPaint = Color.white
     var3.upperBound = var2.upperBound
     var3.lowerBound = var2.lowerBound
     var3.autoRangeIncludesZero = false
