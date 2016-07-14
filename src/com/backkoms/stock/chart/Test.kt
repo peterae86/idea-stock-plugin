@@ -1,5 +1,7 @@
 package com.backkoms.stock.chart
 
+import org.jfree.chart.axis.NumberAxis
+import org.jfree.chart.axis.NumberTickUnit
 import org.jfree.chart.axis.ValueAxis
 import org.jfree.chart.plot.CombinedDomainXYPlot
 import org.jfree.chart.plot.ValueMarker
@@ -50,36 +52,43 @@ private fun createPricePlot(timeseriesArea: TimeseriesArea, dataSet: StockDateSe
     //    if (var1.isAverageVisible()) {
     //        var2.addSeries(dataSet.getAverageTimeSeries().getTimeSeries())
     //    }
-
-    val var3 = var1.logicPriceAxis
-    val var4 = TimeseriesNumberAxis(var3.logicTicks)
+    val var4 = StockPriceAxis(0.0, 20.0, -20.0)
     var4.tickLabelPaint = Color.white
     var4.labelPaint = Color.white
+    var4.isAutoRange = true
+    var4.isTickLabelsVisible = true
+    var4.tickMarkPaint = Color.white
+    var4.autoRangeIncludesZero = false;
+    var4.autoRangeMinimumSize = 0.001;
+    var4.tickUnit = NumberTickUnit(0.01);
     val var5 = XYLineAndShapeRenderer(true, false)
-    var4.upperBound = var3.upperBound
-    var4.lowerBound = var3.lowerBound
-    var5.setSeriesPaint(0, var1.priceColor)
-    var5.setSeriesPaint(1, var1.averageColor)
-    val var6 = TimeseriesNumberAxis(var3.ratelogicTicks)
-    var6.upperBound = var3.upperBound
-    var6.lowerBound = var3.lowerBound
+//    var5.setSeriesPaint(0, var1.priceColor)
+//    var5.setSeriesPaint(1, var1.averageColor)
+    val var6 = StockRateAxis(0.0, 20.0, -20.0)
+    var6.tickLabelPaint = Color.white
+    var6.labelPaint = Color.white
+    var6.isAutoRange = true
+    var6.isTickLabelsVisible = true
+    var6.tickMarkPaint = Color.white
+    var6.autoRangeIncludesZero = false;
+    var6.tickUnit = NumberTickUnit(0.01);
     val var7 = XYPlot(dataSet.priceSet, null, var4, var5)
     var7.backgroundPaint = backgroundColor
     var7.orientation = var1.orientation
     var7.rangeAxisLocation = var1.priceAxisLocation
-    if (var1.isRateVisible) {
+//    if (var1.isRateVisible) {
         var7.setRangeAxis(1, var6)
         var7.setRangeAxisLocation(1, var1.rateAxisLocation)
         var7.setDataset(1, null)
         var7.mapDatasetToRangeAxis(1, 1)
-    }
-
-    if (var1.isMarkCentralValue) {
-        val var8 = var3.centralValue
-        if (var8 != null) {
-            var7.addRangeMarker(ValueMarker(var8.toDouble(), var1.centralPriceColor, BasicStroke()))
-        }
-    }
+//    }
+//
+//    if (var1.isMarkCentralValue) {
+//        val var8 = var3.centralValue
+//        if (var8 != null) {
+//            var7.addRangeMarker(ValueMarker(var8.toDouble(), var1.centralPriceColor, BasicStroke()))
+//        }
+//    }
 
     return var7
 }
@@ -87,12 +96,11 @@ private fun createPricePlot(timeseriesArea: TimeseriesArea, dataSet: StockDateSe
 private fun createVolumePlot(timeseriesArea: TimeseriesArea, dataSet: StockDateSet): XYPlot {
     val var1 = timeseriesArea.volumeArea
     val var2 = var1.logicVolumeAxis
-    val var3 = TimeseriesNumberAxis(var2.logicTicks)
+    val var3 = NumberAxis()
     var3.labelPaint = Color.white
     var3.tickLabelPaint = Color.white
-    var3.upperBound = var2.upperBound
-    var3.lowerBound = var2.lowerBound
-    var3.autoRangeIncludesZero = false
+    var3.isAutoRange = true
+    var3.autoRangeIncludesZero = true
     val var4 = XYBarRenderer()
     var4.setSeriesPaint(0, var1.volumeColor)
     var4.setShadowVisible(false)

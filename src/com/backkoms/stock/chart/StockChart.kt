@@ -79,7 +79,7 @@ fun createChart(): ChartPanel {
         run {
             var i = 0
             while (true) {
-                dataSet2.add(Date(time + i * 6000), random.nextDouble() + i / 100, random.nextInt(100))
+                dataSet2.add(Date(time + i * 6000), random.nextDouble() + i / 10, random.nextInt(100))
                 i++
                 println(i)
                 Thread.sleep(100)
