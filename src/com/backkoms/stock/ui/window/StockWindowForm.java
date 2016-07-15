@@ -1,11 +1,11 @@
-package com.backkoms.stock.ui;
+package com.backkoms.stock.ui.window;
 
 import javax.swing.*;
 
 /**
  * Created by xiaorui.guo on 2016/7/12.
  */
-public class StockWindow {
+public class StockWindowForm {
     private JPanel container;
     private JList stockList;
     private JTabbedPane stockTabs;

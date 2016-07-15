@@ -1,4 +1,4 @@
-package com.backkoms.stock.chart
+package com.backkoms.stock.ui.chart.dataset
 
 import org.jfree.data.time.*
 import java.util.*
@@ -7,7 +7,7 @@ import java.util.*
  * Created by xiaorui.guo on 2016/7/13.
  */
 
-class StockDateSet {
+class StockDataSet {
     var priceSet: TimeSeriesCollection;
     var volumeSet: TimeSeriesCollection;
     var priceSeries: TimeSeries;
