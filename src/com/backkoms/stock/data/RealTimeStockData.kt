@@ -6,7 +6,10 @@ import com.google.common.collect.Sets
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
+import org.apache.commons.lang.StringEscapeUtils
 import java.io.IOException
+import java.io.StreamTokenizer
+import java.io.StringReader
 import java.net.URLEncoder
 import java.time.LocalDate
 import java.util.*
@@ -72,29 +75,26 @@ object RealTimeStockData {
         listeners.remove(listener)
     }
 
-    fun queryStock(keyword: String, callback: (keyword: String, list: List<StockInfo>) -> Unit) {
-        HttpUtil.getAsync(String.format("http://smartbox.gtimg.cn/s3/?v=2&q=%s&t=gp", URLEncoder.encode(keyword, "utf-8")), object : Callback {
-            override fun onResponse(p0: Call?, p1: Response) {
-                var lines = p1.body().charStream().readLines()
-                var res = parseStockNames(lines)
-                callback.invoke(keyword, res)
-            }
-
-            override fun onFailure(p0: Call?, p1: IOException?) {
-
-            }
-        })
+    fun queryStock(keyword: String): List<StockInfo> {
+        var resp = HttpUtil.getSync(String.format("http://smartbox.gtimg.cn/s3/?v=2&q=%s&t=gp", URLEncoder.encode(keyword, "utf-8")))
+        var lines = resp.body().charStream().readLines();
+        return parseStockNames(lines)
     }
+
 
     private fun parseStockNames(lines: List<String>): List<StockInfo> {
         var line = lines[0]
-        var datas = line.substring(8, line.length - 1).split('~')
+        if (line.equals("v_hint=\"N\";")) {
+            return emptyList()
+        }
+        var datas = line.substring(8, line.length - 1).split('^')
         var res: MutableList<StockInfo> = ArrayList()
-        for (i in datas.indices step 5) {
+        for (dataStr in datas) {
+            var params = dataStr.split('~')
             var info = StockInfo()
-            info.code = datas[i] + datas[i + 1]
-            info.name = datas[i + 2]
-            info.pinyin = datas[i + 3]
+            info.code = params[0] + params[1]
+            info.name = StringEscapeUtils.unescapeJava(params[2])
+            info.pinyin = params[3]
             res.add(info)
         }
         return res

@@ -9,7 +9,6 @@ public class StockWindowForm {
     private JPanel container;
     private JList stockList;
     private JTabbedPane stockTabs;
-    private JTabbedPane tabbedPane1;
     private JButton addButton;
     private JButton deleteButton;
 

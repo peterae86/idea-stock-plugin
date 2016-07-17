@@ -17,6 +17,7 @@ class ListItemView : ListItemForm {
     val fontColor: Color
 
     constructor(name: String, background: Color, fontColor: Color) {
+        container.name = name
         stockName.border = EmptyBorder(0, 0, 0, 0)
         stockName.horizontalAlignment = JTextField.CENTER
         stockName.text = name

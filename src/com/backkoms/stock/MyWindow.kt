@@ -33,37 +33,19 @@ import javax.swing.JTextField
  */
 class MyWindow : ToolWindowFactory {
     var stockView: StockView;
+    var searchView: SearchView;
 
     constructor() {
         stockView = StockView()
+        searchView = SearchView()
+        searchView.addAddListener(stockView)
     }
 
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         var contentFactory: ContentFactory = ContentFactory.SERVICE.getInstance();
 
-        RealTimeStockData.registerStockCode("sz000858", object : InitialDataHandler {
-            override fun handleInitialData(data: StockData, sampleHistory: List<StockData>) {
-                var stockDateSet = StockDataSet()
-                sampleHistory.forEach {
-                    x ->
-                    stockDateSet.add(x.time, x.price, x.volume)
-                }
-                var panel2 = JPanel()
-                var layout = GridLayoutManager(1, 2, Insets(10, 10, 10, 10), 5, 5)
-                panel2.layout = layout
-                var panel = ChartPanel(StockSeriesChartFactory.createTimeSeriesChart(stockDateSet,
-                        StockChartConfig(data.centralValue, data.maxValue, data.minValue)))
-                panel.preferredSize = Dimension(800, 260)
-                panel.focusTraversalKeysEnabled = false
-                panel.mouseListeners.forEach { x -> panel.removeMouseListener(x) }
-                panel2.add(panel, GridConstraints())
-                stockView.stockTabs.add("五粮液", panel2);
-                stockView.addStock("五粮液", "sz000858");
-            }
-        })
-
-        var popup = JBPopupFactory.getInstance().createComponentPopupBuilder(SearchView().container, null).setCancelOnClickOutside(false).setBelongsToGlobalPopupStack(true).setFocusable(true).setRequestFocus(true).setMovable(true).setResizable(true)
+        var popup = JBPopupFactory.getInstance().createComponentPopupBuilder(searchView.container, null).setCancelOnClickOutside(false).setBelongsToGlobalPopupStack(true).setFocusable(true).setRequestFocus(true).setMovable(true).setResizable(true)
                 .setCancelOnOtherWindowOpen(false).setCancelButton(MinimizeButton("Hide"))
                 .setTitle("Regular expressions syntax").setDimensionServiceKey(null, "RegExHelpPopup", true).createPopup();
         popup.showInFocusCenter()
