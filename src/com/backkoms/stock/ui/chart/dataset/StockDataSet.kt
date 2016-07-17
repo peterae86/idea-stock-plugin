@@ -23,7 +23,7 @@ class StockDataSet {
         volumeSet.addSeries(volumeSeries)
     }
 
-    fun add(time: Date, price: Double, volume: Int) {
+    fun add(time: Date, price: Double, volume: Long) {
         priceSeries.add(TimeSeriesDataItem(Second(time), price))
         volumeSeries.add(TimeSeriesDataItem(Second(time), volume))
     }

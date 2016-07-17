@@ -1,4 +1,4 @@
-package com.backkoms.stock.ui.window;
+package com.backkoms.stock.ui.form;
 
 import javax.swing.*;
 
@@ -9,6 +9,9 @@ public class StockWindowForm {
     private JPanel container;
     private JList stockList;
     private JTabbedPane stockTabs;
+    private JTabbedPane tabbedPane1;
+    private JButton addButton;
+    private JButton deleteButton;
 
     public JPanel getContainer() {
         return container;

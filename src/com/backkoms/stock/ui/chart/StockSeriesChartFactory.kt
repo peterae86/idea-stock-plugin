@@ -14,56 +14,60 @@ import org.jfree.chart.renderer.xy.XYBarRenderer
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
 import java.awt.BasicStroke
 import java.awt.Color
+import java.util.*
 
 /**
  * Created by test on 2016/7/15.
  */
+object StockSeriesChartFactory {
 
-private val backgroundColor: Color = Color(60, 63, 65)
-
-
-fun createTimeSeriesChart(timeSeriesDataSet: StockDataSet, stockTimeSeriesArea: StockChartConfig): JFreeChart {
-    var dataAxis = StockDateAxis();
-    var priceAxis = StockPriceAxis(stockTimeSeriesArea.centralValue, stockTimeSeriesArea.maxValue, stockTimeSeriesArea.minValue);
-    var rateAxis = StockRateAxis(stockTimeSeriesArea.centralValue, stockTimeSeriesArea.maxValue, stockTimeSeriesArea.minValue, priceAxis);
-
-    val plot = CombinedDomainXYPlot(dataAxis)
-    plot.gap = stockTimeSeriesArea.gap
-    plot.orientation = stockTimeSeriesArea.orientation
-    plot.domainAxisLocation = stockTimeSeriesArea.dateAxisLocation
-    plot.add(createPricePlot(stockTimeSeriesArea, timeSeriesDataSet, priceAxis, rateAxis), stockTimeSeriesArea.priceWeight)
-    plot.add(createVolumePlot(stockTimeSeriesArea, timeSeriesDataSet), stockTimeSeriesArea.volumeWeight)
-    val chart = StockSeriesChart(plot)
-    chart.backgroundPaint = Color(60, 63, 65)
-    return chart
-}
+    private val backgroundColor: Color = Color(60, 63, 65)
 
 
-private fun createPricePlot(area: StockChartConfig, dataSet: StockDataSet, priceAxis: StockPriceAxis, rateAxis: StockRateAxis): XYPlot {
-    val xyLineAndShapeRenderer = XYLineAndShapeRenderer(true, false)
-    val res = XYPlot(dataSet.priceSet, null, priceAxis, xyLineAndShapeRenderer)
-    res.backgroundPaint = backgroundColor
-    res.orientation = area.orientation
-    res.rangeAxisLocation = area.priceAxisLocation
-    res.setRangeAxis(1, rateAxis)
-    res.setRangeAxisLocation(1, area.rateAxisLocation)
-    res.addRangeMarker(ValueMarker(priceAxis.centralValue, Color.white, BasicStroke()))
-    return res
-}
+    fun createTimeSeriesChart(timeSeriesDataSet: StockDataSet, stockTimeSeriesArea: StockChartConfig): JFreeChart {
+        var dataAxis = StockDateAxis();
+        var priceAxis = StockPriceAxis(stockTimeSeriesArea.centralValue, stockTimeSeriesArea.maxValue, stockTimeSeriesArea.minValue);
+        var rateAxis = StockRateAxis(stockTimeSeriesArea.centralValue, stockTimeSeriesArea.maxValue, stockTimeSeriesArea.minValue, priceAxis);
+
+        val plot = CombinedDomainXYPlot(dataAxis)
+        plot.gap = stockTimeSeriesArea.gap
+        plot.orientation = stockTimeSeriesArea.orientation
+        plot.domainAxisLocation = stockTimeSeriesArea.dateAxisLocation
+        plot.add(createPricePlot(stockTimeSeriesArea, timeSeriesDataSet, priceAxis, rateAxis), stockTimeSeriesArea.priceWeight)
+        plot.add(createVolumePlot(stockTimeSeriesArea, timeSeriesDataSet), stockTimeSeriesArea.volumeWeight)
+        val chart = StockSeriesChart(plot)
+        chart.backgroundPaint = Color(60, 63, 65)
+        chart.borderStroke
+        return chart
+    }
 
 
-private fun createVolumePlot(area: StockChartConfig, dataSet: StockDataSet): XYPlot {
-    val numberAxis = NumberAxis()
-    numberAxis.labelPaint = Color.white
-    numberAxis.tickLabelPaint = Color.white
-    numberAxis.isAutoRange = true
-    numberAxis.autoRangeIncludesZero = true
-    val xyBarRenderer = XYBarRenderer()
-    xyBarRenderer.setSeriesPaint(0, area.volumeColor)
-    xyBarRenderer.setShadowVisible(false)
-    val res = XYPlot(dataSet.volumeSet, null, numberAxis, xyBarRenderer)
-    res.backgroundPaint = backgroundColor
-    res.orientation = area.orientation
-    res.rangeAxisLocation = area.volumeAxisLocation
-    return res
+    private fun createPricePlot(area: StockChartConfig, dataSet: StockDataSet, priceAxis: StockPriceAxis, rateAxis: StockRateAxis): XYPlot {
+        val xyLineAndShapeRenderer = XYLineAndShapeRenderer(true, false)
+        val res = XYPlot(dataSet.priceSet, null, priceAxis, xyLineAndShapeRenderer)
+        res.backgroundPaint = backgroundColor
+        res.orientation = area.orientation
+        res.rangeAxisLocation = area.priceAxisLocation
+        res.setRangeAxis(1, rateAxis)
+        res.setRangeAxisLocation(1, area.rateAxisLocation)
+        res.addRangeMarker(ValueMarker(priceAxis.centralValue, Color.gray, BasicStroke(1.0f)))
+        return res
+    }
+
+
+    private fun createVolumePlot(area: StockChartConfig, dataSet: StockDataSet): XYPlot {
+        val numberAxis = NumberAxis()
+        numberAxis.labelPaint = Color.white
+        numberAxis.tickLabelPaint = Color.white
+        numberAxis.isAutoRange = true
+        numberAxis.autoRangeIncludesZero = true
+        val xyBarRenderer = XYBarRenderer()
+        xyBarRenderer.setSeriesPaint(0, area.volumeColor)
+        xyBarRenderer.setShadowVisible(false)
+        val res = XYPlot(dataSet.volumeSet, null, numberAxis, xyBarRenderer)
+        res.backgroundPaint = backgroundColor
+        res.orientation = area.orientation
+        res.rangeAxisLocation = area.volumeAxisLocation
+        return res
+    }
 }

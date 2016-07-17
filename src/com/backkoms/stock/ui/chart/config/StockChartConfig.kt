@@ -8,7 +8,7 @@ import java.awt.Color
  * Created by xiaorui.guo on 2016/7/14.
  */
 class StockChartConfig {
-    val gap = 10.0
+    val gap = 20.0
     val orientation = PlotOrientation.VERTICAL
     val volumeWeight = 1
     val priceWeight = 2
