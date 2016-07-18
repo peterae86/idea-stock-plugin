@@ -67,9 +67,16 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
     }
 
     override fun valueChanged(e: ListSelectionEvent?) {
-        var item = model.get(stockList.selectedIndex) as JPanel
-        var stockName = item.name
-        stockTabs.selectedIndex = stockTabs.indexOfTab(stockName)
+        for (i in 0..model.size()) {
+            var item = model.get(stockList.selectedIndex) as JPanel
+            if (i != stockList.selectedIndex) {
+                item.background = Color.BLACK
+            } else {
+                item.background = Color.BLUE
+                var stockName = item.name
+                stockTabs.selectedIndex = stockTabs.indexOfTab(stockName)
+            }
+        }
     }
 
 

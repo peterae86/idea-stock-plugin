@@ -16,7 +16,7 @@ class ListItemView : ListItemForm {
     val negativeRateColor = Color.green
     val fontColor: Color
 
-    constructor(name: String, background: Color, fontColor: Color) {
+    constructor(name: String, background: Color=Color.white, fontColor: Color) {
         container.name = name
         stockName.border = EmptyBorder(0, 0, 0, 0)
         stockName.horizontalAlignment = JTextField.CENTER
