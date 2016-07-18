@@ -52,20 +52,28 @@ object RealTimeStockData {
 
 
     fun registerStockCode(stockCode: String, initialDataHandler: InitialDataHandler) {
-        var stockInfoResponse = HttpUtil.getSync("http://qt.gtimg.cn/q=" + stockCode)
-        if (!stockInfoResponse.isSuccessful) {
-            throw RuntimeException()
+        var stockInfoResponse: Response? = null
+        var todayHistoryResponse: Response? = null
+        try {
+            stockInfoResponse = HttpUtil.getSync("http://qt.gtimg.cn/q=" + stockCode)
+            if (!stockInfoResponse.isSuccessful) {
+                throw RuntimeException()
+            }
+
+            todayHistoryResponse = HttpUtil.getSync(String.format("http://data.gtimg.cn/flashdata/hushen/minute/%s.js?%s", stockCode, random.nextDouble()))
+            var stockInfoLines = stockInfoResponse.body().charStream().readLines()
+            var todayHistoryLines: List<String>
+            if (todayHistoryResponse.isSuccessful) {
+                todayHistoryLines = todayHistoryResponse.body().charStream().readLines()
+            } else {
+                todayHistoryLines = emptyList()
+            }
+            initialDataHandler.handleInitialData(parseStockInfoLines(stockInfoLines)[0], parseHistoryLines(todayHistoryLines))
+            stockCodeSet.add(stockCode)
+        } finally {
+            stockInfoResponse?.close()
+            todayHistoryResponse?.close()
         }
-        var todayHistoryResponse = HttpUtil.getSync(String.format("http://data.gtimg.cn/flashdata/hushen/minute/%s.js?%s", stockCode, random.nextDouble()))
-        var stockInfoLines = stockInfoResponse.body().charStream().readLines()
-        var todayHistoryLines: List<String>
-        if (todayHistoryResponse.isSuccessful) {
-            todayHistoryLines = todayHistoryResponse.body().charStream().readLines()
-        } else {
-            todayHistoryLines = emptyList()
-        }
-        initialDataHandler.handleInitialData(parseStockInfoLines(stockInfoLines)[0], parseHistoryLines(todayHistoryLines))
-        stockCodeSet.add(stockCode)
     }
 
 
@@ -89,6 +97,9 @@ object RealTimeStockData {
     }
 
     fun parseHistoryLines(lines: List<String>): List<StockData> {
+        if (lines.size < 2) {
+            return emptyList()
+        }
         var res: MutableList<StockData> = ArrayList()
         var today = LocalDate.now()
         var lastVolume = 0L
@@ -119,18 +130,29 @@ object RealTimeStockData {
     }
 
     fun queryStock(keyword: String): List<StockInfo> {
-        var resp = HttpUtil.getSync(String.format("http://smartbox.gtimg.cn/s3/?v=2&q=%s&t=gp", URLEncoder.encode(keyword, "utf-8")))
-        var lines = resp.body().charStream().readLines();
-        return parseStockNames(lines)
+        var resp: Response? = null
+        try {
+            resp = HttpUtil.getSync(String.format("http://smartbox.gtimg.cn/s3/?v=2&q=%s&t=gp", URLEncoder.encode(keyword, "utf-8")))
+            var lines = resp.body().charStream().readLines();
+            resp.close()
+            return parseStockNames(lines)
+        } finally {
+            resp?.close()
+        }
     }
 
     fun queryRealtimeData(stockCodes: Collection<String>): List<StockData> {
         if (stockCodes.size == 0) {
             return emptyList()
         }
-        var resp = HttpUtil.getSync("http://qt.gtimg.cn/q=" + Joiner.on(',').join(stockCodes));
-        var lines = resp.body().charStream().readLines();
-        return parseStockInfoLines(lines)
+        var resp: Response? = null
+        try {
+            resp = HttpUtil.getSync("http://qt.gtimg.cn/q=" + Joiner.on(',').join(stockCodes));
+            var lines = resp.body().charStream().readLines();
+            return parseStockInfoLines(lines)
+        } finally {
+            resp?.close()
+        }
     }
 
 

@@ -23,7 +23,15 @@ class StockPriceAxis(centralValue: Double, maxValue: Double, minValue: Double
     var minValue = minValue
 
     init {
-        range = Range(centralValue * 0.99, centralValue * 1.01)
+        println(centralValue)
+        if (centralValue > 1e-5) {
+            range = Range(centralValue * 0.99, centralValue * 1.01)
+        } else {
+            range = Range(0.0, 1.0)
+            this.centralValue = 1.0
+            this.maxValue = 1.0
+            this.minValue = 0.0
+        }
         this.tickLabelPaint = Color.white
         this.labelPaint = Color.white
         this.isAutoRange = true

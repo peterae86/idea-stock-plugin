@@ -1,24 +1,16 @@
 package com.backkoms.stock.ui.view
 
-import com.backkoms.stock.data.InitialDataHandler
 import com.backkoms.stock.data.RealTimeStockData
-import com.backkoms.stock.data.StockData
 import com.backkoms.stock.data.StockInfo
 import com.backkoms.stock.listener.AddListener
-import com.backkoms.stock.ui.chart.StockSeriesChartFactory
-import com.backkoms.stock.ui.chart.config.StockChartConfig
-import com.backkoms.stock.ui.chart.dataset.StockDataSet
 import com.backkoms.stock.ui.component.SearchResultListRenderer
-import com.backkoms.stock.ui.component.StockListRenderer
 import com.backkoms.stock.ui.form.SearchForm
-import com.intellij.uiDesigner.core.GridConstraints
-import com.intellij.uiDesigner.core.GridLayoutManager
-import org.jfree.chart.ChartPanel
 import java.awt.Color
-import java.awt.Dimension
-import java.awt.Insets
 import java.util.*
-import javax.swing.*
+import javax.swing.DefaultListModel
+import javax.swing.DefaultListSelectionModel
+import javax.swing.JTextField
+import javax.swing.ListSelectionModel
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.event.ListSelectionEvent
@@ -57,19 +49,21 @@ class SearchView : SearchForm, DocumentListener, ListSelectionListener {
     }
 
     override fun valueChanged(e: ListSelectionEvent) {
-        synchronized(this) {
-            var field = model.get(searchResultList.selectedIndex) as JTextField
-            field.background = Color.BLUE
-            for (i in fields.indices) {
-                if (i != searchResultList.selectedIndex) {
-                    fields[i].background = Color.BLACK
+        if (searchResultList.selectedIndex != -1) {
+            synchronized(this) {
+                var field = model.get(searchResultList.selectedIndex) as JTextField
+                field.background = Color.BLUE
+                for (i in fields.indices) {
+                    if (i != searchResultList.selectedIndex) {
+                        fields[i].background = Color.BLACK
+                    }
+                }
+                var stockInfo = stockInfoList[searchResultList.selectedIndex]
+                println(stockInfo.name + " " + stockInfo.code)
+                addListeners.forEach { x ->
+                    x.add(stockInfo.name, stockInfo.code)
                 }
             }
-            var stockInfo = stockInfoList[searchResultList.selectedIndex]
-            addListeners.forEach { x ->
-                x.add(stockInfo.name, stockInfo.code)
-            }
-
         }
     }
 
@@ -87,6 +81,7 @@ class SearchView : SearchForm, DocumentListener, ListSelectionListener {
                 if (keyword.text == s) {
                     model.removeAllElements()
                     fields.clear()
+                    stockInfoList.clear()
                     res.forEach { x ->
                         var textField = JTextField(x.name + " " + x.code)
                         model.addElement(textField)

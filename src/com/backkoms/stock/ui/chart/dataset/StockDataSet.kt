@@ -12,7 +12,7 @@ class StockDataSet {
     var volumeSet: TimeSeriesCollection;
     var priceSeries: TimeSeries;
     var volumeSeries: TimeSeries;
-
+    var centralValue: Double = 0.0
 
     init {
         priceSeries = TimeSeries("price");
@@ -27,4 +27,5 @@ class StockDataSet {
         priceSeries.addOrUpdate(TimeSeriesDataItem(Second(time), price))
         volumeSeries.addOrUpdate(TimeSeriesDataItem(Second(time), volume))
     }
+
 }

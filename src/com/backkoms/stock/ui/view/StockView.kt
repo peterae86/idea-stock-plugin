@@ -48,24 +48,24 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
         stockList.selectionModel = s
         stockList.cellRenderer = StockListRenderer()
         stockList.addListSelectionListener(this)
+        var popup = JBPopupFactory.getInstance().createComponentPopupBuilder(searchView.container, null)
+                .setCancelOnClickOutside(false)
+                .setBelongsToGlobalPopupStack(true)
+                .setFocusable(true)
+                .setRequestFocus(true)
+                .setMovable(true)
+                .setResizable(true)
+                .setCancelOnOtherWindowOpen(false)
+                .setCancelButton(MinimizeButton("Hide"))
+                .setTitle("Search stock").setDimensionServiceKey(null, "Search stock", true).createPopup();
         addButton.addActionListener {
-            var popup = JBPopupFactory.getInstance().createComponentPopupBuilder(searchView.container, null)
-                    .setCancelOnClickOutside(false)
-                    .setBelongsToGlobalPopupStack(true)
-                    .setFocusable(true)
-                    .setRequestFocus(true)
-                    .setMovable(true)
-                    .setResizable(true)
-                    .setCancelOnOtherWindowOpen(false)
-                    .setCancelButton(MinimizeButton("Hide"))
-                    .setTitle("Search stock").setDimensionServiceKey(null, "Search stock", true).createPopup();
             popup.showInFocusCenter()
         }
         deleteButton.addActionListener {
             var i = stockList.selectedIndex
             if (i != -1) {
                 var item = model.get(stockList.selectedIndex) as JPanel
-                stockList.remove(i)
+                model.remove(i)
                 stockTabs.removeTabAt(stockTabs.indexOfTab(item.name))
                 stockDataSetMap.remove(item.name)
                 stockListMap.remove(item.name)
@@ -74,7 +74,9 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
         }
         RealTimeStockData.addRealTimeDataListener {
             x ->
-            stockDataSetMap[x.name]?.add(x.time, x.price, x.volume)
+            if (stockDataSetMap[x.name]?.centralValue != 0.0) {
+                stockDataSetMap[x.name]?.add(x.time, x.price, x.volume)
+            }
             stockListMap[x.name]?.setRate((x.price / x.centralValue - 1) * 100.0)
         }
     }
@@ -101,6 +103,7 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
                         panel.focusTraversalKeysEnabled = false
                         panel.mouseListeners.forEach { x -> panel.removeMouseListener(x) }
                         panel2.add(panel, GridConstraints())
+                        stockDateSet.centralValue = data.centralValue
                         var listView = ListItemView(stockName, Color.BLACK, Color.white)
                         model.addElement(listView.container)
                         stockTabs.addTab(stockName, panel2)
