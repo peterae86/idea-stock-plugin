@@ -17,5 +17,7 @@
     <orderEntry type="library" name="jstockchart-0.4.3" level="project" />
     <orderEntry type="library" name="okhttp-3.4.1" level="project" />
     <orderEntry type="library" name="okio-1.9.0" level="project" />
+    <orderEntry type="library" name="okhttp-3.4.1" level="project" />
+    <orderEntry type="library" name="okio-1.9.0" level="project" />
   </component>
 </module>

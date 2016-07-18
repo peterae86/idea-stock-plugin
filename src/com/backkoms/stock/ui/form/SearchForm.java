@@ -8,7 +8,7 @@ import javax.swing.*;
 public class SearchForm {
     private JTextField keyword;
     private JList searchResultList;
-    private JPanel container;
+    private volatile JPanel container;
 
     public JTextField getKeyword() {
         return keyword;

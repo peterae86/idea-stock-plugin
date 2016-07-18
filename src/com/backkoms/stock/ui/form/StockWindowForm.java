@@ -23,4 +23,12 @@ public class StockWindowForm {
     public JTabbedPane getStockTabs() {
         return stockTabs;
     }
+
+    public JButton getAddButton() {
+        return addButton;
+    }
+
+    public JButton getDeleteButton() {
+        return deleteButton;
+    }
 }

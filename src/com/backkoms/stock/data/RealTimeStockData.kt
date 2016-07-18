@@ -2,17 +2,23 @@ package com.backkoms.stock.data
 
 import com.backkoms.stock.util.DateUtil
 import com.backkoms.stock.util.HttpUtil
+import com.google.common.base.Joiner
 import com.google.common.collect.Sets
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import org.apache.commons.lang.StringEscapeUtils
+import org.apache.commons.lang.time.FastDateFormat
 import java.io.IOException
 import java.io.StreamTokenizer
 import java.io.StringReader
 import java.net.URLEncoder
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import javax.swing.JPanel
 
 /**
  * Created by test on 2016/7/16.
@@ -21,6 +27,29 @@ object RealTimeStockData {
     val stockCodeSet: MutableSet<String> = Sets.newConcurrentHashSet()
     val listeners: MutableSet<PriceDataListener> = Sets.newConcurrentHashSet()
     val random = Random()
+    val executeService = Executors.newScheduledThreadPool(5)
+    @Volatile var realTimeDataListener: (stockData: StockData) -> Unit = {}
+
+    init {
+        executeService.scheduleAtFixedRate({
+            var res = queryRealtimeData(stockCodeSet)
+
+            res.forEach {
+                x ->
+                try {
+                    realTimeDataListener.invoke(x)
+                } catch(e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+        }, 10, 20, TimeUnit.SECONDS)
+    }
+
+    fun addRealTimeDataListener(realTimeDataListener: (stockData: StockData) -> Unit) {
+        this.realTimeDataListener = realTimeDataListener
+    }
+
 
     fun registerStockCode(stockCode: String, initialDataHandler: InitialDataHandler) {
         var stockInfoResponse = HttpUtil.getSync("http://qt.gtimg.cn/q=" + stockCode)
@@ -29,19 +58,33 @@ object RealTimeStockData {
         }
         var todayHistoryResponse = HttpUtil.getSync(String.format("http://data.gtimg.cn/flashdata/hushen/minute/%s.js?%s", stockCode, random.nextDouble()))
         var stockInfoLines = stockInfoResponse.body().charStream().readLines()
-        var todayHistoryLines = todayHistoryResponse.body().charStream().readLines()
-        initialDataHandler.handleInitialData(parseStockInfoLines(stockInfoLines), parseHistoryLines(todayHistoryLines))
+        var todayHistoryLines: List<String>
+        if (todayHistoryResponse.isSuccessful) {
+            todayHistoryLines = todayHistoryResponse.body().charStream().readLines()
+        } else {
+            todayHistoryLines = emptyList()
+        }
+        initialDataHandler.handleInitialData(parseStockInfoLines(stockInfoLines)[0], parseHistoryLines(todayHistoryLines))
         stockCodeSet.add(stockCode)
     }
 
 
-    fun parseStockInfoLines(lines: List<String>): StockData {
-        var line = lines[0]
-        var datas = line.split('~')
-        var res = StockData()
-        res.centralValue = datas[4].toDouble()
-        res.maxValue = datas[47].toDouble()
-        res.minValue = datas[48].toDouble()
+    fun parseStockInfoLines(lines: List<String>): List<StockData> {
+        var res: MutableList<StockData> = ArrayList()
+        var format = SimpleDateFormat("yyyyMMddHHmm")
+        lines.forEach {
+            line ->
+            var datas = line.split('~')
+            var stockData = StockData()
+            stockData.centralValue = datas[4].toDouble()
+            stockData.maxValue = datas[47].toDouble()
+            stockData.minValue = datas[48].toDouble()
+            stockData.price = datas[3].toDouble()
+            stockData.volume = datas[6].toLong()
+            stockData.name = datas[1]
+            stockData.time = format.parse(datas[30].substring(0, datas[30].length - 2))
+            res.add(stockData)
+        }
         return res
     }
 
@@ -81,6 +124,15 @@ object RealTimeStockData {
         return parseStockNames(lines)
     }
 
+    fun queryRealtimeData(stockCodes: Collection<String>): List<StockData> {
+        if (stockCodes.size == 0) {
+            return emptyList()
+        }
+        var resp = HttpUtil.getSync("http://qt.gtimg.cn/q=" + Joiner.on(',').join(stockCodes));
+        var lines = resp.body().charStream().readLines();
+        return parseStockInfoLines(lines)
+    }
+
 
     private fun parseStockNames(lines: List<String>): List<StockInfo> {
         var line = lines[0]
@@ -117,6 +169,7 @@ class StockData {
     var centralValue: Double = 0.0
     var maxValue: Double = 0.0
     var minValue: Double = 0.0
+    lateinit var name: String
 }
 
 class StockInfo {

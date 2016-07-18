@@ -33,22 +33,16 @@ import javax.swing.JTextField
  */
 class MyWindow : ToolWindowFactory {
     var stockView: StockView;
-    var searchView: SearchView;
+
 
     constructor() {
         stockView = StockView()
-        searchView = SearchView()
-        searchView.addAddListener(stockView)
+
     }
 
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         var contentFactory: ContentFactory = ContentFactory.SERVICE.getInstance();
-
-        var popup = JBPopupFactory.getInstance().createComponentPopupBuilder(searchView.container, null).setCancelOnClickOutside(false).setBelongsToGlobalPopupStack(true).setFocusable(true).setRequestFocus(true).setMovable(true).setResizable(true)
-                .setCancelOnOtherWindowOpen(false).setCancelButton(MinimizeButton("Hide"))
-                .setTitle("Regular expressions syntax").setDimensionServiceKey(null, "RegExHelpPopup", true).createPopup();
-        popup.showInFocusCenter()
         var content: Content = contentFactory.createContent(stockView.container, "", false);
         toolWindow.contentManager.addContent(content);
     }

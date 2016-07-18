@@ -24,7 +24,7 @@ class StockDataSet {
     }
 
     fun add(time: Date, price: Double, volume: Long) {
-        priceSeries.add(TimeSeriesDataItem(Second(time), price))
-        volumeSeries.add(TimeSeriesDataItem(Second(time), volume))
+        priceSeries.addOrUpdate(TimeSeriesDataItem(Second(time), price))
+        volumeSeries.addOrUpdate(TimeSeriesDataItem(Second(time), volume))
     }
 }
