@@ -1,35 +1,48 @@
 package com.backkoms.stock.context
 
-import com.google.common.collect.Sets
+import com.fasterxml.jackson.core.type.TypeReference
 import com.intellij.ide.util.PropertiesComponent
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by xiaorui.guo on 2016/7/19.
  */
 object MyConfig {
-    private val stockCodeSet: MutableSet<String> = Sets.newConcurrentHashSet()
+    private val stockCodeNameMap: MutableMap<String, String> = ConcurrentHashMap()
     private val pc: PropertiesComponent = PropertiesComponent.getInstance();
 
     fun save() {
-        pc.setValues("stockCodeSet", stockCodeSet.toTypedArray())
+        pc.setValue("stockCodeSet", Global.objectMapper.writeValueAsString(stockCodeNameMap))
     }
 
     fun load() {
-        stockCodeSet.clear()
-        stockCodeSet.addAll(pc.getValues("stockCodeSet") ?: emptyArray())
+        stockCodeNameMap.clear()
+        try {
+            stockCodeNameMap.putAll(Global.objectMapper.readValue(pc.getValue("stockCodeSet") ?: "{}", object : TypeReference<Map<String, String>>() {}))
+        } catch(e: Exception) {
+            pc.setValue("stockCodeSet", null)
+        }
     }
 
     fun getAllStockCodes(): List<String> {
-        return stockCodeSet.distinct()
+        return stockCodeNameMap.keys.distinct()
     }
 
-    fun addStockCode(stockCode: String) {
-        stockCodeSet.add(stockCode)
+    fun addStockCode(stockCode: String, stockName: String) {
+        stockCodeNameMap.put(stockCode, stockName)
         save()
     }
 
     fun removeStockCode(stockCode: String) {
-        stockCodeSet.remove(stockCode)
+        stockCodeNameMap.remove(stockCode)
         save()
+    }
+
+    fun hasStock(stockCode: String): Boolean {
+        return stockCodeNameMap.containsKey(stockCode)
+    }
+
+    fun getStockName(stockCode: String): String {
+        return stockCodeNameMap[stockCode]!!
     }
 }

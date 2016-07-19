@@ -11,7 +11,6 @@ public class ListItemForm {
     private JPanel container;
 
     public JTextField getStockName() {
-
         return stockName;
     }
 

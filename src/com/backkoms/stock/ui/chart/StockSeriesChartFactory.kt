@@ -1,5 +1,7 @@
 package com.backkoms.stock.ui.chart
 
+import com.backkoms.stock.context.Global
+import com.backkoms.stock.data.RealTimeStockData
 import com.backkoms.stock.ui.chart.axis.StockDateAxis
 import com.backkoms.stock.ui.chart.axis.StockPriceAxis
 import com.backkoms.stock.ui.chart.axis.StockRateAxis
@@ -24,11 +26,10 @@ object StockSeriesChartFactory {
     private val backgroundColor: Color = Color(60, 63, 65)
 
 
-    fun createTimeSeriesChart(timeSeriesDataSet: StockDataSet, stockTimeSeriesArea: StockChartConfig): JFreeChart {
+    fun createTimeSeriesChart(stockCode: String, timeSeriesDataSet: StockDataSet, stockTimeSeriesArea: StockChartConfig): JFreeChart {
         var dataAxis = StockDateAxis();
-        var priceAxis = StockPriceAxis(stockTimeSeriesArea.centralValue, stockTimeSeriesArea.maxValue, stockTimeSeriesArea.minValue);
-        var rateAxis = StockRateAxis(stockTimeSeriesArea.centralValue, stockTimeSeriesArea.maxValue, stockTimeSeriesArea.minValue, priceAxis);
-
+        var priceAxis = StockPriceAxis();
+        var rateAxis = StockRateAxis(priceAxis);
         val plot = CombinedDomainXYPlot(dataAxis)
         plot.gap = stockTimeSeriesArea.gap
         plot.orientation = stockTimeSeriesArea.orientation
@@ -38,6 +39,22 @@ object StockSeriesChartFactory {
         val chart = StockSeriesChart(plot)
         chart.backgroundPaint = Color(60, 63, 65)
         chart.borderStroke
+
+        Global.fixedThreadPool.submit {
+            var stockData = RealTimeStockData.queryRealTimeData(arrayListOf(stockCode))[0]
+            var stockHistory = RealTimeStockData.queryHistory(stockCode)
+            priceAxis.centralValue = stockData.centralValue
+            priceAxis.minValue = stockData.minValue
+            priceAxis.maxValue = stockData.maxValue
+            rateAxis.centralValue = stockData.centralValue
+            rateAxis.maxValue = stockData.maxValue
+            rateAxis.minValue = stockData.minValue
+            timeSeriesDataSet.centralValue = stockData.centralValue
+            stockHistory.forEach {
+                x ->
+                timeSeriesDataSet.add(x.time, x.price, x.volume)
+            }
+        }
         return chart
     }
 

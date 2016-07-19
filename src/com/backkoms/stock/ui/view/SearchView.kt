@@ -1,5 +1,6 @@
 package com.backkoms.stock.ui.view
 
+import com.backkoms.stock.context.Global
 import com.backkoms.stock.data.RealTimeStockData
 import com.backkoms.stock.data.vo.StockInfo
 import com.backkoms.stock.listener.AddListener
@@ -52,16 +53,16 @@ class SearchView : SearchForm, DocumentListener, ListSelectionListener {
         if (searchResultList.selectedIndex != -1) {
             synchronized(this) {
                 var field = model.get(searchResultList.selectedIndex) as JTextField
-                field.background = Color.BLUE
+                field.background = Global.selectedColor
                 for (i in fields.indices) {
                     if (i != searchResultList.selectedIndex) {
-                        fields[i].background = Color.BLACK
+                        fields[i].background = Global.backgroundColor
                     }
                 }
                 var stockInfo = stockInfoList[searchResultList.selectedIndex]
                 println(stockInfo.name + " " + stockInfo.code)
                 addListeners.forEach { x ->
-                    x.add(stockInfo.code)
+                    x.add(stockInfo.code, stockInfo.name)
                 }
             }
         }

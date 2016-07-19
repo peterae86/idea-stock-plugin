@@ -16,22 +16,13 @@ import java.util.*
 /**
  * Created by test on 2016/7/14.
  */
-class StockPriceAxis(centralValue: Double, maxValue: Double, minValue: Double
-) : NumberAxis() {
-    var centralValue = centralValue
-    var maxValue = maxValue
-    var minValue = minValue
+class StockPriceAxis() : NumberAxis() {
+    var centralValue = -1.0
+    var maxValue = 0.0
+    var minValue = 0.0
+    var defaultRange = Range(0.0, 1.0)
 
     init {
-        println(centralValue)
-        if (centralValue > 1e-5) {
-            range = Range(centralValue * 0.99, centralValue * 1.01)
-        } else {
-            range = Range(0.0, 1.0)
-            this.centralValue = 1.0
-            this.maxValue = 1.0
-            this.minValue = 0.0
-        }
         this.tickLabelPaint = Color.white
         this.labelPaint = Color.white
         this.isAutoRange = true
@@ -47,19 +38,26 @@ class StockPriceAxis(centralValue: Double, maxValue: Double, minValue: Double
 
         if (plot is ValueAxisPlot) {
             var dataRange: Range? = plot.getDataRange(this)
-            dataRange = dataRange ?: defaultAutoRange!!
+            dataRange = dataRange ?: defaultRange
+            if (centralValue == -1.0) {
+                setRange(defaultRange, false, false)
+            }
             var maxChange = Math.max(Math.abs(centralValue - dataRange.lowerBound), Math.abs(centralValue - dataRange.upperBound))
             if ((centralValue + maxChange) > range.upperBound ||
                     ((centralValue + maxChange) < range.upperBound && (range.upperBound - maxChange - centralValue) / centralValue < 0.005)) {
                 var newRange = Range(Math.max(minValue, centralValue * 0.98 - maxChange), Math.min(maxValue, centralValue * 1.02 + maxChange))
-                setRange(newRange, false, false)
+                if (newRange.lowerBound >= newRange.upperBound) {
+                    setRange(defaultRange, false, false)
+                } else {
+                    setRange(newRange, false, false)
+                }
             }
         }
     }
 
     override fun refreshTicksVertical(var1: Graphics2D?, var2: Rectangle2D?, var3: RectangleEdge?): MutableList<Tick>? {
-        var var4: TextAnchor? = null
-        var var5: TextAnchor? = null
+        var var4: TextAnchor
+        var var5: TextAnchor
         var var6 = 0.0
         if (this.isVerticalTickLabels) {
             var4 = TextAnchor.BOTTOM_CENTER
@@ -82,8 +80,11 @@ class StockPriceAxis(centralValue: Double, maxValue: Double, minValue: Double
 
     private fun createTicks2(var1: TextAnchor?, var2: TextAnchor?, var3: Double): MutableList<Tick>? {
         var list: MutableList<Tick> = ArrayList();
-        list.add(NumberTick(range.lowerBound, String.format("%.2f", range.lowerBound), var1, var2, var3))
-        list.add(NumberTick(range.upperBound, String.format("%.2f", range.upperBound), var1, var2, var3))
+        if (centralValue != -1.0) {
+            list.add(NumberTick(range.lowerBound, String.format("%.2f", range.lowerBound), var1, var2, var3))
+            list.add(NumberTick(centralValue, String.format("%.2f", centralValue), var1, var2, var3))
+            list.add(NumberTick(range.upperBound, String.format("%.2f", range.upperBound), var1, var2, var3))
+        }
         return list
     }
 

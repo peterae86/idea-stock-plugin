@@ -17,15 +17,9 @@ class StockChartConfig {
     val volumeAxisLocation = AxisLocation.BOTTOM_OR_LEFT
     val volumeColor = Color.white
     val dateAxisLocation = AxisLocation.BOTTOM_OR_LEFT
+    val backgroundColor: Color = Color(60, 63, 65)
 
-    var centralValue: Double
-    var maxValue: Double
-    var minValue: Double
+    constructor() {
 
-
-    constructor(centralValue: Double, maxValue: Double, minValue: Double) {
-        this.centralValue = centralValue
-        this.maxValue = maxValue
-        this.minValue = minValue
     }
 }

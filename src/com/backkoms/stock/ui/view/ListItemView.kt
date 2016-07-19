@@ -1,5 +1,6 @@
 package com.backkoms.stock.ui.view
 
+import com.backkoms.stock.context.Global
 import com.backkoms.stock.ui.form.ListItemForm
 import javafx.scene.layout.Background
 import java.awt.Color
@@ -16,16 +17,16 @@ class ListItemView : ListItemForm {
     val negativeRateColor = Color.green
     val fontColor: Color
 
-    constructor(name: String, background: Color=Color.white, fontColor: Color) {
+    constructor(name: String, fontColor: Color) {
         container.name = name
         stockName.border = EmptyBorder(0, 0, 0, 0)
         stockName.horizontalAlignment = JTextField.CENTER
         stockName.text = name
-        stockName.background = background
+        stockName.background = Global.backgroundColor
         stockRate.border = EmptyBorder(0, 0, 0, 0)
         stockRate.text = "0.00%"
         stockRate.horizontalAlignment = JTextField.CENTER
-        stockRate.background = background
+        stockRate.background = Global.backgroundColor
         this.fontColor = fontColor
     }
 

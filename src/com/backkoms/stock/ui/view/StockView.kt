@@ -1,8 +1,8 @@
 package com.backkoms.stock.ui.view
 
+import com.backkoms.stock.context.Global
 import com.backkoms.stock.context.MyConfig
 import com.backkoms.stock.data.RealTimeStockData
-import com.backkoms.stock.data.vo.StockData
 import com.backkoms.stock.listener.AddListener
 import com.backkoms.stock.ui.chart.StockSeriesChartFactory
 import com.backkoms.stock.ui.chart.config.StockChartConfig
@@ -13,17 +13,15 @@ import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.openapi.ui.popup.util.MinimizeButton
 import com.intellij.uiDesigner.core.GridConstraints
 import com.intellij.uiDesigner.core.GridLayoutManager
-import javafx.scene.control.SelectionModel
 import org.jfree.chart.ChartPanel
 import java.awt.Color
-import java.awt.Component
 import java.awt.Dimension
 import java.awt.Insets
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import javax.swing.*
+import javax.swing.DefaultListModel
+import javax.swing.DefaultListSelectionModel
+import javax.swing.JPanel
+import javax.swing.ListSelectionModel
 import javax.swing.event.ListSelectionEvent
 import javax.swing.event.ListSelectionListener
 
@@ -33,7 +31,6 @@ import javax.swing.event.ListSelectionListener
 class StockView : StockWindowForm, AddListener, ListSelectionListener {
 
     val model: DefaultListModel<Any>;
-    val stockSet: MutableSet<String> = HashSet();
     var searchView: SearchView;
     val stockDataSetMap: MutableMap<String, StockDataSet> = ConcurrentHashMap()
     val stockListMap: MutableMap<String, ListItemView> = ConcurrentHashMap()
@@ -82,37 +79,30 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
     }
 
 
-    override fun add(stockCode: String) {
+    override fun add(stockCode: String, stockName: String) {
         synchronized(this) {
-            if (!stockSet.contains(stockCode)) {
-                stockSet.add(stockCode)
-                RealTimeStockData.registerStockCode(stockCode, {
-                    data: StockData, sampleHistory: List<StockData> ->
-                    stockNameCodeMap.put(data.name, stockCode)
-                    var stockDateSet = StockDataSet()
-                    sampleHistory.forEach {
-                        x ->
-                        stockDateSet.add(x.time, x.price, x.volume)
-                    }
-                    var panel2 = JPanel()
-                    var layout = GridLayoutManager(1, 2, Insets(10, 10, 10, 10), 5, 5)
-                    panel2.layout = layout
-                    var panel = ChartPanel(StockSeriesChartFactory.createTimeSeriesChart(stockDateSet,
-                            StockChartConfig(data.centralValue, data.maxValue, data.minValue)))
-                    panel.preferredSize = Dimension(800, 260)
-                    panel.focusTraversalKeysEnabled = false
-                    panel.mouseListeners.forEach { x -> panel.removeMouseListener(x) }
-                    panel2.add(panel, GridConstraints())
-                    stockDateSet.centralValue = data.centralValue
-                    var listView = ListItemView(data.name, Color.BLACK, Color.white)
-                    model.addElement(listView.container)
-                    stockTabs.addTab(data.name, panel2)
-                    stockDataSetMap.put(data.name, stockDateSet)
-                    stockListMap.put(data.name, listView)
-                    MyConfig.addStockCode(stockCode)
-                })
+            if (!MyConfig.hasStock(stockCode)) {
+                initStock(stockCode, stockName)
+                MyConfig.addStockCode(stockCode, stockName)
             }
         }
+    }
+
+    fun initStock(stockCode: String, stockName: String) {
+        var stockDateSet = StockDataSet()
+        var stockPanel = JPanel()
+        stockPanel.layout = GridLayoutManager(1, 2, Insets(10, 10, 10, 10), 5, 5)
+        var panel = ChartPanel(StockSeriesChartFactory.createTimeSeriesChart(stockCode, stockDateSet, StockChartConfig()))
+        panel.preferredSize = Dimension(800, 260)
+        panel.focusTraversalKeysEnabled = false
+        panel.mouseListeners.forEach { x -> panel.removeMouseListener(x) }
+        stockPanel.add(panel, GridConstraints())
+        var listView = ListItemView(stockName, Color.white)
+        model.addElement(listView.container)
+        stockTabs.addTab(stockName, stockPanel)
+        stockDataSetMap.put(stockName, stockDateSet)
+        stockListMap.put(stockName, listView)
+        stockNameCodeMap.put(stockName, stockCode)
     }
 
     override fun valueChanged(e: ListSelectionEvent?) {
@@ -120,11 +110,18 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
         for (i in 0..(model.size() - 1)) {
             var item = model.get(i) as JPanel
             if (i != index) {
-                item.background = Color.BLACK
+                item.background = Global.backgroundColor
+                item.components.forEach {
+                    x ->
+                    x.background = Global.backgroundColor
+                }
             } else {
-                item.background = Color.WHITE
-                var stockName = item.name
-                stockTabs.selectedIndex = stockTabs.indexOfTab(stockName)
+                item.background = Global.selectedColor
+                item.components.forEach {
+                    x ->
+                    x.background = Global.selectedColor
+                }
+                stockTabs.selectedIndex = stockTabs.indexOfTab(item.name)
             }
         }
     }

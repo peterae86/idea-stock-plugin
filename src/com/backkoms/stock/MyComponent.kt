@@ -23,7 +23,7 @@ class MyComponent : ApplicationComponent {
         RealTimeStockData.dataSourceDelegate = TxDataSourceImpl()
         MyConfig.getAllStockCodes().forEach {
             x ->
-            Global.stockView.add(x)
+            Global.stockView.initStock(x, MyConfig.getStockName(x))
         }
     }
 }

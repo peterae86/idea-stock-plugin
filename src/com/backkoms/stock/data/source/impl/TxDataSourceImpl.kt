@@ -83,7 +83,6 @@ class TxDataSourceImpl : DataSource {
         }
         var res: MutableList<StockData> = ArrayList()
         var today = LocalDate.now()
-        var lastVolume = 0L
         lines.subList(2, lines.size - 1).forEach({ line ->
             var stockData = StockData()
             var empty0 = line.indexOf(' ', 0)
@@ -91,8 +90,7 @@ class TxDataSourceImpl : DataSource {
             var time = line.substring(0, empty0)
             stockData.time = DateUtil.localTimeToDate(today.atTime(time.substring(0, 2).toInt(), time.substring(2).toInt()))
             stockData.price = line.substring(empty0 + 1, empty1).toDouble()
-            stockData.volume = line.substring(empty1 + 1, line.indexOf('\\', 0)).toLong() - lastVolume
-            lastVolume = line.substring(empty1 + 1, line.indexOf('\\', 0)).toLong()
+            stockData.volume = line.substring(empty1 + 1, line.indexOf('\\', 0)).toLong()
             res.add(stockData)
         })
         return res

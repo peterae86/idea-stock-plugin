@@ -1,5 +1,6 @@
 package com.backkoms.stock.ui.chart
 
+import com.backkoms.stock.context.Global
 import org.jfree.chart.JFreeChart
 import org.jfree.chart.plot.Plot
 

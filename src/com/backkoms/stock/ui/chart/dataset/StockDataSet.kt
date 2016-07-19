@@ -13,6 +13,10 @@ class StockDataSet {
     var priceSeries: TimeSeries;
     var volumeSeries: TimeSeries;
     var centralValue: Double = 0.0
+    var lastTime: Date = Date(0)
+    var nowTime: Date = Date(0)
+    var lastVolume = 0L
+    var nowVolume = 0L
 
     init {
         priceSeries = TimeSeries("price");
@@ -25,7 +29,13 @@ class StockDataSet {
 
     fun add(time: Date, price: Double, volume: Long) {
         priceSeries.addOrUpdate(TimeSeriesDataItem(Second(time), price))
-        volumeSeries.addOrUpdate(TimeSeriesDataItem(Second(time), volume))
+        volumeSeries.addOrUpdate(TimeSeriesDataItem(Second(time), volume - lastVolume))
+        if (!nowTime.equals(time)) {
+            lastTime = nowTime
+            lastVolume = nowVolume
+        }
+        nowTime = time
+        nowVolume = volume
     }
 
 }
