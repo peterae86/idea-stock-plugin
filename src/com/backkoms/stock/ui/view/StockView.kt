@@ -1,8 +1,8 @@
 package com.backkoms.stock.ui.view
 
-import com.backkoms.stock.data.InitialDataHandler
+import com.backkoms.stock.context.MyConfig
 import com.backkoms.stock.data.RealTimeStockData
-import com.backkoms.stock.data.StockData
+import com.backkoms.stock.data.vo.StockData
 import com.backkoms.stock.listener.AddListener
 import com.backkoms.stock.ui.chart.StockSeriesChartFactory
 import com.backkoms.stock.ui.chart.config.StockChartConfig
@@ -69,7 +69,7 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
                 stockTabs.removeTabAt(stockTabs.indexOfTab(item.name))
                 stockDataSetMap.remove(item.name)
                 stockListMap.remove(item.name)
-                RealTimeStockData.removeStockCode(stockNameCodeMap[item.name]!!)
+                MyConfig.removeStockCode(stockNameCodeMap[item.name]!!)
             }
         }
         RealTimeStockData.addRealTimeDataListener {
@@ -82,34 +82,34 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
     }
 
 
-    override fun add(stockName: String, stockCode: String) {
+    override fun add(stockCode: String) {
         synchronized(this) {
-            if (!stockSet.contains(stockName)) {
-                stockSet.add(stockName)
-                RealTimeStockData.registerStockCode(stockCode, object : InitialDataHandler {
-                    override fun handleInitialData(data: StockData, sampleHistory: List<StockData>) {
-                        stockNameCodeMap.put(stockName, stockCode)
-                        var stockDateSet = StockDataSet()
-                        sampleHistory.forEach {
-                            x ->
-                            stockDateSet.add(x.time, x.price, x.volume)
-                        }
-                        var panel2 = JPanel()
-                        var layout = GridLayoutManager(1, 2, Insets(10, 10, 10, 10), 5, 5)
-                        panel2.layout = layout
-                        var panel = ChartPanel(StockSeriesChartFactory.createTimeSeriesChart(stockDateSet,
-                                StockChartConfig(data.centralValue, data.maxValue, data.minValue)))
-                        panel.preferredSize = Dimension(800, 260)
-                        panel.focusTraversalKeysEnabled = false
-                        panel.mouseListeners.forEach { x -> panel.removeMouseListener(x) }
-                        panel2.add(panel, GridConstraints())
-                        stockDateSet.centralValue = data.centralValue
-                        var listView = ListItemView(stockName, Color.BLACK, Color.white)
-                        model.addElement(listView.container)
-                        stockTabs.addTab(stockName, panel2)
-                        stockDataSetMap.put(stockName, stockDateSet)
-                        stockListMap.put(stockName, listView)
+            if (!stockSet.contains(stockCode)) {
+                stockSet.add(stockCode)
+                RealTimeStockData.registerStockCode(stockCode, {
+                    data: StockData, sampleHistory: List<StockData> ->
+                    stockNameCodeMap.put(data.name, stockCode)
+                    var stockDateSet = StockDataSet()
+                    sampleHistory.forEach {
+                        x ->
+                        stockDateSet.add(x.time, x.price, x.volume)
                     }
+                    var panel2 = JPanel()
+                    var layout = GridLayoutManager(1, 2, Insets(10, 10, 10, 10), 5, 5)
+                    panel2.layout = layout
+                    var panel = ChartPanel(StockSeriesChartFactory.createTimeSeriesChart(stockDateSet,
+                            StockChartConfig(data.centralValue, data.maxValue, data.minValue)))
+                    panel.preferredSize = Dimension(800, 260)
+                    panel.focusTraversalKeysEnabled = false
+                    panel.mouseListeners.forEach { x -> panel.removeMouseListener(x) }
+                    panel2.add(panel, GridConstraints())
+                    stockDateSet.centralValue = data.centralValue
+                    var listView = ListItemView(data.name, Color.BLACK, Color.white)
+                    model.addElement(listView.container)
+                    stockTabs.addTab(data.name, panel2)
+                    stockDataSetMap.put(data.name, stockDateSet)
+                    stockListMap.put(data.name, listView)
+                    MyConfig.addStockCode(stockCode)
                 })
             }
         }

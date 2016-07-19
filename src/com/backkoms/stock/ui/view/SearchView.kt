@@ -1,7 +1,7 @@
 package com.backkoms.stock.ui.view
 
 import com.backkoms.stock.data.RealTimeStockData
-import com.backkoms.stock.data.StockInfo
+import com.backkoms.stock.data.vo.StockInfo
 import com.backkoms.stock.listener.AddListener
 import com.backkoms.stock.ui.component.SearchResultListRenderer
 import com.backkoms.stock.ui.form.SearchForm
@@ -61,7 +61,7 @@ class SearchView : SearchForm, DocumentListener, ListSelectionListener {
                 var stockInfo = stockInfoList[searchResultList.selectedIndex]
                 println(stockInfo.name + " " + stockInfo.code)
                 addListeners.forEach { x ->
-                    x.add(stockInfo.name, stockInfo.code)
+                    x.add(stockInfo.code)
                 }
             }
         }

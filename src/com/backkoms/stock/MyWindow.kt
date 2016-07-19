@@ -1,8 +1,8 @@
 package com.backkoms.stock
 
-import com.backkoms.stock.data.InitialDataHandler
+import com.backkoms.stock.context.Global
 import com.backkoms.stock.data.RealTimeStockData
-import com.backkoms.stock.data.StockData
+import com.backkoms.stock.data.vo.StockData
 import com.backkoms.stock.ui.chart.StockSeriesChartFactory
 import com.backkoms.stock.ui.chart.config.StockChartConfig
 import com.backkoms.stock.ui.chart.dataset.StockDataSet
@@ -32,18 +32,11 @@ import javax.swing.JTextField
  * Created by test on 2016/7/10.
  */
 class MyWindow : ToolWindowFactory {
-    var stockView: StockView;
-
-
-    constructor() {
-        stockView = StockView()
-
-    }
 
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         var contentFactory: ContentFactory = ContentFactory.SERVICE.getInstance();
-        var content: Content = contentFactory.createContent(stockView.container, "", false);
+        var content: Content = contentFactory.createContent(Global.stockView.container, "", false);
         toolWindow.contentManager.addContent(content);
     }
 }
