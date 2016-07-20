@@ -43,9 +43,9 @@ class StockPriceAxis() : NumberAxis() {
                 setRange(defaultRange, false, false)
             }
             var maxChange = Math.max(Math.abs(centralValue - dataRange.lowerBound), Math.abs(centralValue - dataRange.upperBound))
-            if ((centralValue + maxChange) > range.upperBound ||
-                    ((centralValue + maxChange) < range.upperBound && (range.upperBound - maxChange - centralValue) / centralValue < 0.005)) {
-                var newRange = Range(Math.max(minValue, centralValue * 0.98 - maxChange), Math.min(maxValue, centralValue * 1.02 + maxChange))
+            if (range.lowerBound < minValue || range.upperBound > maxValue || (centralValue + maxChange) > range.upperBound ||
+                    ((centralValue + maxChange) < range.upperBound && (range.upperBound - maxChange - centralValue) / centralValue < 0.002)) {
+                var newRange = Range(Math.max(minValue, centralValue * 0.995 - maxChange), Math.min(maxValue, centralValue * 1.005 + maxChange))
                 if (newRange.lowerBound >= newRange.upperBound) {
                     setRange(defaultRange, false, false)
                 } else {
@@ -81,9 +81,9 @@ class StockPriceAxis() : NumberAxis() {
     private fun createTicks2(var1: TextAnchor?, var2: TextAnchor?, var3: Double): MutableList<Tick>? {
         var list: MutableList<Tick> = ArrayList()
         if (centralValue != -1.0) {
-            list.add(NumberTick(range.lowerBound, String.format("%.2f", range.lowerBound), var1, var2, var3))
-            list.add(NumberTick(centralValue, String.format("%.2f", centralValue), var1, var2, var3))
-            list.add(NumberTick(range.upperBound, String.format("%.2f", range.upperBound), var1, var2, var3))
+            list.add(NumberTick(range.lowerBound, String.format("%.3f", range.lowerBound), var1, var2, var3))
+            list.add(NumberTick(centralValue, String.format("%.3f", centralValue), var1, var2, var3))
+            list.add(NumberTick(range.upperBound, String.format("%.3f", range.upperBound), var1, var2, var3))
         }
         return list
     }

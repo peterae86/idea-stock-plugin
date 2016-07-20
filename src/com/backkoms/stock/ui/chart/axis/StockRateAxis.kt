@@ -17,12 +17,11 @@ import java.util.*
 /**
  * Created by test on 2016/7/14.
  */
-class StockRateAxis(priceAxis: StockPriceAxis
+class StockRateAxis(var priceAxis: StockPriceAxis
 ) : NumberAxis() {
     var centralValue = -1.0
     var maxValue = 0.0
     var minValue = 0.0
-    var priceAxis = priceAxis
     var defaultRange = Range(0.0, 1.0)
 
     init {
@@ -44,10 +43,10 @@ class StockRateAxis(priceAxis: StockPriceAxis
             if (centralValue == -1.0) {
                 setRange(defaultRange, false, false)
             }
-            var maxChange = Math.max(Math.abs(centralValue - dataRange.lowerBound), Math.abs(centralValue - dataRange.upperBound))
-            if ((centralValue + maxChange) > range.upperBound ||
-                    ((centralValue + maxChange) < range.upperBound && (range.upperBound - maxChange - centralValue) / centralValue < 0.005)) {
-                var newRange = Range(Math.max(minValue, centralValue * 0.98 - maxChange), Math.min(maxValue, centralValue * 1.02 + maxChange))
+            val maxChange = Math.max(Math.abs(centralValue - dataRange.lowerBound), Math.abs(centralValue - dataRange.upperBound))
+            if (range.lowerBound < minValue || range.upperBound > maxValue || (centralValue + maxChange) > range.upperBound ||
+                    ((centralValue + maxChange) < range.upperBound && (range.upperBound - maxChange - centralValue) / centralValue < 0.002)) {
+                val newRange = Range(Math.max(minValue, centralValue * 0.995 - maxChange), Math.min(maxValue, centralValue * 1.005 + maxChange))
                 if (newRange.lowerBound >= newRange.upperBound) {
                     setRange(defaultRange, false, false)
                 } else {
@@ -58,8 +57,8 @@ class StockRateAxis(priceAxis: StockPriceAxis
     }
 
     override fun refreshTicksVertical(var1: Graphics2D?, var2: Rectangle2D?, var3: RectangleEdge?): MutableList<Tick>? {
-        var var4: TextAnchor
-        var var5: TextAnchor
+        val var4: TextAnchor
+        val var5: TextAnchor
         var var6 = 0.0
         if (this.isVerticalTickLabels) {
             var4 = TextAnchor.BOTTOM_CENTER
@@ -81,7 +80,7 @@ class StockRateAxis(priceAxis: StockPriceAxis
     }
 
     private fun createTicks2(var1: TextAnchor?, var2: TextAnchor?, var3: Double): MutableList<Tick>? {
-        var list: MutableList<Tick> = ArrayList()
+        val list: MutableList<Tick> = ArrayList()
         if (centralValue != -1.0) {
             list.add(NumberTick(range.lowerBound, String.format("%.2f%%", -((centralValue - range.lowerBound) / centralValue) * 100), var1, var2, var3))
             list.add(NumberTick(centralValue, "0.00%", var1, var2, var3))

@@ -31,7 +31,7 @@ object RealTimeStockData : DataSource {
             } catch(e: Exception) {
                 e.printStackTrace()
             }
-        }, 10, 20, TimeUnit.SECONDS)
+        }, 10, 10, TimeUnit.SECONDS)
     }
 
     fun addRealTimeDataListener(realTimeDataListener: (stockData: StockData) -> Unit) {

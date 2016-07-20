@@ -1,17 +1,15 @@
 <idea-plugin version="2">
-    <id>com.your.company.unique.plugin.id</id>
-    <name>Plugin display name here</name>
+    <id>com.backkoms</id>
+    <name>stock</name>
     <version>1.0</version>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="peterae87@gmail.com" url="http://www.backkoms.com">backkoms</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+         安装本插件后，在tool window中可以选择添加股票，查看股票价格和当日走势，仅支持a股。
     ]]></description>
 
     <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+        1.0 完成基本功能
     ]]>
     </change-notes>
 
@@ -20,9 +18,9 @@
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
-    <!-- uncomment to enable plugin in all products
+
     <depends>com.intellij.modules.lang</depends>
-    -->
+
     <application-components>
         <component>
             <implementation-class>com.backkoms.stock.MyComponent</implementation-class>

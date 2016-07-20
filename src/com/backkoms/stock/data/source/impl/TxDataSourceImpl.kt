@@ -59,12 +59,12 @@ class TxDataSourceImpl : DataSource {
     }
 
     private fun parseStockInfoLines(lines: List<String>): List<StockData> {
-        var res: MutableList<StockData> = ArrayList()
-        var format = SimpleDateFormat("yyyyMMddHHmm")
+        val res: MutableList<StockData> = ArrayList()
+        val format = SimpleDateFormat("yyyyMMddHHmm")
         lines.forEach {
             line ->
-            var datas = line.split('~')
-            var stockData = StockData()
+            val datas = line.split('~')
+            val stockData = StockData()
             stockData.centralValue = datas[4].toDouble()
             stockData.maxValue = datas[47].toDouble()
             stockData.minValue = datas[48].toDouble()

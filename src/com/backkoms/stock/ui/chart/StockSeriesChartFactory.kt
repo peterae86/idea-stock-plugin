@@ -27,9 +27,9 @@ object StockSeriesChartFactory {
 
 
     fun createTimeSeriesChart(stockCode: String, timeSeriesDataSet: StockDataSet, stockTimeSeriesArea: StockChartConfig): JFreeChart {
-        var dataAxis = StockDateAxis()
-        var priceAxis = StockPriceAxis()
-        var rateAxis = StockRateAxis(priceAxis)
+        val dataAxis = StockDateAxis()
+        val priceAxis = StockPriceAxis()
+        val rateAxis = StockRateAxis(priceAxis)
         val plot = CombinedDomainXYPlot(dataAxis)
         plot.gap = stockTimeSeriesArea.gap
         plot.orientation = stockTimeSeriesArea.orientation
@@ -41,8 +41,8 @@ object StockSeriesChartFactory {
         chart.borderStroke
 
         Global.fixedThreadPool.submit {
-            var stockData = RealTimeStockData.queryRealTimeData(arrayListOf(stockCode))[0]
-            var stockHistory = RealTimeStockData.queryHistory(stockCode)
+            val stockData = RealTimeStockData.queryRealTimeData(arrayListOf(stockCode))[0]
+            val stockHistory = RealTimeStockData.queryHistory(stockCode)
             priceAxis.centralValue = stockData.centralValue
             priceAxis.minValue = stockData.minValue
             priceAxis.maxValue = stockData.maxValue
