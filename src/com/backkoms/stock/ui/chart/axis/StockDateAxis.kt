@@ -4,10 +4,10 @@ import com.backkoms.stock.util.DateUtil
 import org.jfree.chart.axis.*
 import org.jfree.ui.RectangleEdge
 import org.jfree.ui.TextAnchor
+import org.joda.time.LocalDateTime
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.geom.Rectangle2D
-import java.time.LocalDate
 import java.util.*
 
 /**
@@ -17,7 +17,7 @@ class StockDateAxis : DateAxis {
     private var ticks: List<Tick> = ArrayList()
 
     constructor() {
-        setRange(DateUtil.localTimeToDate(LocalDate.now().atTime(9, 30)), DateUtil.localTimeToDate(LocalDate.now().atTime(15, 0)))
+        setRange(DateUtil.localTimeToDate(LocalDateTime.now().withTime(9, 30, 0, 0)), DateUtil.localTimeToDate(LocalDateTime.now().withTime(15, 0, 0, 0)))
         val timeline = SegmentedTimeline(SegmentedTimeline.MINUTE_SEGMENT_SIZE, 1350, 90)
         timeline.startTime = SegmentedTimeline.firstMondayAfter1900() + 780 * SegmentedTimeline.MINUTE_SEGMENT_SIZE
         this.timeline = timeline
@@ -55,17 +55,17 @@ class StockDateAxis : DateAxis {
     private fun createTicksHorizontal(textAuthor: TextAnchor, rotationAnchor: TextAnchor, var3: Double): List<Tick> {
         val tickList = ArrayList<Tick>()
 
-        var nowDate = LocalDate.now()
-        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.atTime(9, 30)), "09:30", adjustAnchorHorizontal(textAuthor, DateTickAlignment.START), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.START), var3))
-        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.atTime(10, 0)), "", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
-        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.atTime(10, 30)), "10:30", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
-        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.atTime(11, 0)), "", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
-        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.atTime(11, 30)), "11:30", adjustAnchorHorizontal(textAuthor, DateTickAlignment.END), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.END), var3))
-        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.atTime(13, 0)), "13:00", adjustAnchorHorizontal(textAuthor, DateTickAlignment.START), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.START), var3))
-        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.atTime(13, 30)), "", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
-        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.atTime(14, 0)), "14:00", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
-        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.atTime(14, 30)), "", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
-        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.atTime(15, 0)), "15:00", adjustAnchorHorizontal(textAuthor, DateTickAlignment.END), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.END), var3))
+        var nowDate = LocalDateTime.now()
+        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.withTime(9, 30, 0, 0)), "09:30", adjustAnchorHorizontal(textAuthor, DateTickAlignment.START), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.START), var3))
+        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.withTime(10, 0, 0, 0)), "", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
+        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.withTime(10, 30, 0, 0)), "10:30", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
+        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.withTime(11, 0, 0, 0)), "", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
+        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.withTime(11, 30, 0, 0)), "11:30", adjustAnchorHorizontal(textAuthor, DateTickAlignment.END), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.END), var3))
+        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.withTime(13, 0, 0, 0)), "13:00", adjustAnchorHorizontal(textAuthor, DateTickAlignment.START), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.START), var3))
+        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.withTime(13, 30, 0, 0)), "", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
+        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.withTime(14, 0, 0, 0)), "14:00", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
+        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.withTime(14, 30, 0, 0)), "", adjustAnchorHorizontal(textAuthor, DateTickAlignment.MID), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.MID), var3))
+        tickList.add(DateTick(DateUtil.localTimeToDate(nowDate.withTime(15, 0, 0, 0)), "15:00", adjustAnchorHorizontal(textAuthor, DateTickAlignment.END), adjustAnchorHorizontal(rotationAnchor, DateTickAlignment.END), var3))
         return tickList
     }
 

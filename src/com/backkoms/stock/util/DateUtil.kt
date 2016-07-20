@@ -1,7 +1,6 @@
 package com.backkoms.stock.util
 
-import java.time.LocalDateTime
-import java.time.ZoneId
+import org.joda.time.LocalDateTime
 import java.util.*
 
 /**
@@ -9,8 +8,6 @@ import java.util.*
  */
 object DateUtil {
     fun localTimeToDate(localDate: LocalDateTime): Date {
-        var zone = ZoneId.systemDefault();
-        var instant = localDate.atZone(zone).toInstant();
-        return Date.from(instant);
+        return localDate.toDate()
     }
 }

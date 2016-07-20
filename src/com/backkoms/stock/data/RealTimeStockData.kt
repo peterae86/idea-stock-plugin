@@ -1,30 +1,13 @@
 package com.backkoms.stock.data
 
 import com.backkoms.stock.context.MyConfig
-import com.backkoms.stock.data.vo.StockData
-import com.backkoms.stock.data.vo.StockInfo
 import com.backkoms.stock.data.source.DataSource
 import com.backkoms.stock.data.source.impl.EmptyDataSourceImpl
-import com.backkoms.stock.util.DateUtil
-import com.backkoms.stock.util.HttpUtil
-import com.google.common.base.Joiner
+import com.backkoms.stock.data.vo.StockData
+import com.backkoms.stock.data.vo.StockInfo
 import com.google.common.collect.Sets
-import com.intellij.ide.util.PropertiesComponent
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Response
-import org.apache.commons.lang.StringEscapeUtils
-import org.apache.commons.lang.time.FastDateFormat
-import java.io.IOException
-import java.io.StreamTokenizer
-import java.io.StringReader
-import java.net.URLEncoder
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import javax.swing.JPanel
 
 /**
  * Created by test on 2016/7/16.

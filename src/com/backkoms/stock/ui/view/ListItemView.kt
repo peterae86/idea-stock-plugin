@@ -2,11 +2,8 @@ package com.backkoms.stock.ui.view
 
 import com.backkoms.stock.context.Global
 import com.backkoms.stock.ui.form.ListItemForm
-import javafx.scene.layout.Background
 import java.awt.Color
-import java.awt.Rectangle
 import javax.swing.JTextField
-import javax.swing.border.Border
 import javax.swing.border.EmptyBorder
 
 /**
