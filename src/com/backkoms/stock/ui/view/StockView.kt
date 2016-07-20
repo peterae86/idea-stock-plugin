@@ -30,8 +30,8 @@ import javax.swing.event.ListSelectionListener
  */
 class StockView : StockWindowForm, AddListener, ListSelectionListener {
 
-    val model: DefaultListModel<Any>;
-    var searchView: SearchView;
+    val model: DefaultListModel<Any>
+    var searchView: SearchView
     val stockDataSetMap: MutableMap<String, StockDataSet> = ConcurrentHashMap()
     val stockListMap: MutableMap<String, ListItemView> = ConcurrentHashMap()
     val stockNameCodeMap: MutableMap<String, String> = ConcurrentHashMap()
@@ -45,17 +45,17 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
         stockList.selectionModel = s
         stockList.cellRenderer = StockListRenderer()
         stockList.addListSelectionListener(this)
-        var popup = JBPopupFactory.getInstance().createComponentPopupBuilder(searchView.container, null)
-                .setCancelOnClickOutside(false)
-                .setBelongsToGlobalPopupStack(true)
-                .setFocusable(true)
-                .setRequestFocus(true)
-                .setMovable(true)
-                .setResizable(true)
-                .setCancelOnOtherWindowOpen(false)
-                .setCancelButton(MinimizeButton("Hide"))
-                .setTitle("Search stock").setDimensionServiceKey(null, "Search stock", true).createPopup();
         addButton.addActionListener {
+            var popup = JBPopupFactory.getInstance().createComponentPopupBuilder(searchView.container, null)
+                    .setCancelOnClickOutside(false)
+                    .setBelongsToGlobalPopupStack(true)
+                    .setFocusable(true)
+                    .setRequestFocus(true)
+                    .setMovable(true)
+                    .setResizable(true)
+                    .setCancelOnOtherWindowOpen(false)
+                    .setCancelButton(MinimizeButton("Hide"))
+                    .setTitle("Search stock").setDimensionServiceKey(null, "Search stock", true).createPopup()
             popup.showInFocusCenter()
         }
         deleteButton.addActionListener {

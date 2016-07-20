@@ -1,4 +1,4 @@
-package com.backkoms.stock.ui.chart.axis;
+package com.backkoms.stock.ui.chart.axis
 
 import org.jfree.chart.axis.NumberAxis
 import org.jfree.chart.axis.NumberTick
@@ -28,9 +28,9 @@ class StockPriceAxis() : NumberAxis() {
         this.isAutoRange = true
         this.isTickLabelsVisible = true
         this.tickMarkPaint = Color.white
-        this.autoRangeIncludesZero = false;
-        this.autoRangeMinimumSize = 0.001;
-        this.tickUnit = NumberTickUnit(0.01);
+        this.autoRangeIncludesZero = false
+        this.autoRangeMinimumSize = 0.001
+        this.tickUnit = NumberTickUnit(0.01)
     }
 
     override fun autoAdjustRange() {
@@ -79,7 +79,7 @@ class StockPriceAxis() : NumberAxis() {
     }
 
     private fun createTicks2(var1: TextAnchor?, var2: TextAnchor?, var3: Double): MutableList<Tick>? {
-        var list: MutableList<Tick> = ArrayList();
+        var list: MutableList<Tick> = ArrayList()
         if (centralValue != -1.0) {
             list.add(NumberTick(range.lowerBound, String.format("%.2f", range.lowerBound), var1, var2, var3))
             list.add(NumberTick(centralValue, String.format("%.2f", centralValue), var1, var2, var3))

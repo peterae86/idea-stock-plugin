@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 object MyConfig {
     private val stockCodeNameMap: MutableMap<String, String> = ConcurrentHashMap()
-    private val pc: PropertiesComponent = PropertiesComponent.getInstance();
+    private val pc: PropertiesComponent = PropertiesComponent.getInstance()
 
     fun save() {
         pc.setValue("stockCodeSet", Global.objectMapper.writeValueAsString(stockCodeNameMap))

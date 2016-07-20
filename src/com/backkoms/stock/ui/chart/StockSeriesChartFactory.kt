@@ -27,9 +27,9 @@ object StockSeriesChartFactory {
 
 
     fun createTimeSeriesChart(stockCode: String, timeSeriesDataSet: StockDataSet, stockTimeSeriesArea: StockChartConfig): JFreeChart {
-        var dataAxis = StockDateAxis();
-        var priceAxis = StockPriceAxis();
-        var rateAxis = StockRateAxis(priceAxis);
+        var dataAxis = StockDateAxis()
+        var priceAxis = StockPriceAxis()
+        var rateAxis = StockRateAxis(priceAxis)
         val plot = CombinedDomainXYPlot(dataAxis)
         plot.gap = stockTimeSeriesArea.gap
         plot.orientation = stockTimeSeriesArea.orientation

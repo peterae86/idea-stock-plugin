@@ -3,6 +3,7 @@ package com.backkoms.stock.context
 import com.backkoms.stock.ui.view.StockView
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.awt.Color
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 /**
@@ -11,7 +12,7 @@ import java.util.concurrent.Executors
 object Global {
     val stockView: StockView = StockView();
     val scheduledThreadPool = Executors.newScheduledThreadPool(5)
-    val fixedThreadPool = Executors.newFixedThreadPool(10)
+    val fixedThreadPool: ExecutorService = Executors.newFixedThreadPool(10)
     val objectMapper = ObjectMapper()
 
     val backgroundColor: Color = Color(60, 63, 65)

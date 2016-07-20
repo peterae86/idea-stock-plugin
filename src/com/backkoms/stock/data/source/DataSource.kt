@@ -7,7 +7,7 @@ import com.backkoms.stock.data.vo.StockInfo
  * Created by xiaorui.guo on 2016/7/19.
  */
 interface DataSource {
-    open fun queryRealTimeData(stockCodes: Collection<String>): List<StockData>
-    open fun queryStock(keyword: String): List<StockInfo>
-    open fun queryHistory(stockCode: String): List<StockData>
+    fun queryRealTimeData(stockCodes: Collection<String>): List<StockData>
+    fun queryStock(keyword: String): List<StockInfo>
+    fun queryHistory(stockCode: String): List<StockData>
 }

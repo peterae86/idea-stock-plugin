@@ -21,14 +21,14 @@ object HttpUtil {
 
     @Throws(IOException::class)
     fun getSync(url: String): Response {
-        var request = Request.Builder().url(url).build();
-        return client.newCall(request).execute();
+        var request = Request.Builder().url(url).build()
+        return client.newCall(request).execute()
     }
 
     @Throws(IOException::class)
     fun getAsync(url: String, callback: Callback) {
-        var request = Request.Builder().url(url).build();
-        client.newCall(request).enqueue(callback);
+        var request = Request.Builder().url(url).build()
+        client.newCall(request).enqueue(callback)
     }
 }
 
