@@ -1,7 +1,7 @@
 package com.backkoms.stock.ui.view
 
-import com.backkoms.stock.context.Global
-import com.backkoms.stock.context.MyConfig
+import com.backkoms.stock.context.Common
+import com.backkoms.stock.context.GlobalConfig
 import com.backkoms.stock.data.RealTimeStockData
 import com.backkoms.stock.listener.AddListener
 import com.backkoms.stock.ui.chart.StockSeriesChartFactory
@@ -66,7 +66,7 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
                 stockTabs.removeTabAt(stockTabs.indexOfTab(item.name))
                 stockDataSetMap.remove(item.name)
                 stockListMap.remove(item.name)
-                MyConfig.removeStockCode(stockNameCodeMap[item.name]!!)
+                GlobalConfig.removeStockCode(stockNameCodeMap[item.name]!!)
             }
         }
         RealTimeStockData.addRealTimeDataListener {
@@ -81,9 +81,9 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
 
     override fun add(stockCode: String, stockName: String) {
         synchronized(this) {
-            if (!MyConfig.hasStock(stockCode)) {
+            if (!GlobalConfig.hasStock(stockCode)) {
                 initStock(stockCode, stockName)
-                MyConfig.addStockCode(stockCode, stockName)
+                GlobalConfig.addStockCode(stockCode, stockName)
             }
         }
     }
@@ -91,9 +91,9 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
     fun initStock(stockCode: String, stockName: String) {
         var stockDateSet = StockDataSet()
         var stockPanel = JPanel()
-        stockPanel.layout = GridLayoutManager(1, 2, Insets(10, 10, 10, 10), 5, 5)
+        stockPanel.layout = GridLayoutManager(1, 2, Insets(5, 5, 5, 5), 2, 2)
         var panel = ChartPanel(StockSeriesChartFactory.createTimeSeriesChart(stockCode, stockDateSet, StockChartConfig()))
-        panel.preferredSize = Dimension(800, 260)
+        panel.preferredSize = Dimension(800, 400)
         panel.focusTraversalKeysEnabled = false
         panel.mouseListeners.forEach { x -> panel.removeMouseListener(x) }
         stockPanel.add(panel, GridConstraints())
@@ -110,16 +110,16 @@ class StockView : StockWindowForm, AddListener, ListSelectionListener {
         for (i in 0..(model.size() - 1)) {
             var item = model.get(i) as JPanel
             if (i != index) {
-                item.background = Global.backgroundColor
+                item.background = Common.backgroundColor
                 item.components.forEach {
                     x ->
-                    x.background = Global.backgroundColor
+                    x.background = Common.backgroundColor
                 }
             } else {
-                item.background = Global.selectedColor
+                item.background = Common.selectedColor
                 item.components.forEach {
                     x ->
-                    x.background = Global.selectedColor
+                    x.background = Common.selectedColor
                 }
                 stockTabs.selectedIndex = stockTabs.indexOfTab(item.name)
             }

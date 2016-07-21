@@ -1,6 +1,6 @@
 package com.backkoms.stock.ui.view
 
-import com.backkoms.stock.context.Global
+import com.backkoms.stock.context.Common
 import com.backkoms.stock.ui.form.ListItemForm
 import java.awt.Color
 import javax.swing.JTextField
@@ -19,11 +19,11 @@ class ListItemView : ListItemForm {
         stockName.border = EmptyBorder(0, 0, 0, 0)
         stockName.horizontalAlignment = JTextField.CENTER
         stockName.text = name
-        stockName.background = Global.backgroundColor
+        stockName.background = Common.backgroundColor
         stockRate.border = EmptyBorder(0, 0, 0, 0)
         stockRate.text = "0.00%"
         stockRate.horizontalAlignment = JTextField.CENTER
-        stockRate.background = Global.backgroundColor
+        stockRate.background = Common.backgroundColor
         this.fontColor = fontColor
     }
 

@@ -1,15 +1,17 @@
 <idea-plugin version="2">
     <id>com.backkoms</id>
     <name>stock</name>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <vendor email="peterae87@gmail.com" url="http://www.backkoms.com">backkoms</vendor>
 
     <description><![CDATA[
-         安装本插件后，在tool window中可以选择添加股票，查看股票价格和当日走势，仅支持a股。
-    ]]></description>
+         After installing this plugin, you can choose the stock, and add to the "my stock" tool window, and then you will receive the latest price information.<br/>
+         Note: currently only supports A-share market
+]]></description>
 
     <change-notes><![CDATA[
-        1.0 完成基本功能
+        1.0 basic
+        1.0.1 fix some bug.
     ]]>
     </change-notes>
 

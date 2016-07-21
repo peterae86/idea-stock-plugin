@@ -1,6 +1,6 @@
 package com.backkoms.stock.ui.chart
 
-import com.backkoms.stock.context.Global
+import com.backkoms.stock.context.Common
 import com.backkoms.stock.data.RealTimeStockData
 import com.backkoms.stock.ui.chart.axis.StockDateAxis
 import com.backkoms.stock.ui.chart.axis.StockPriceAxis
@@ -40,7 +40,7 @@ object StockSeriesChartFactory {
         chart.backgroundPaint = Color(60, 63, 65)
         chart.borderStroke
 
-        Global.fixedThreadPool.submit {
+        Common.fixedThreadPool.submit {
             val stockData = RealTimeStockData.queryRealTimeData(arrayListOf(stockCode))[0]
             val stockHistory = RealTimeStockData.queryHistory(stockCode)
             priceAxis.centralValue = stockData.centralValue
