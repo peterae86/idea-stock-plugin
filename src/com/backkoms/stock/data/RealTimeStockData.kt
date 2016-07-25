@@ -7,8 +7,6 @@ import com.backkoms.stock.data.source.impl.EmptyDataSourceImpl
 import com.backkoms.stock.data.vo.StockData
 import com.backkoms.stock.data.vo.StockInfo
 import com.google.common.collect.Sets
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
 /**
@@ -29,12 +27,16 @@ class RealTimeStockData{
         }, 10, 10, TimeUnit.SECONDS)
     }
 
+    private constructor()
+
     companion object : DataSource  {
         val listeners: MutableSet<(StockData: StockData) -> Unit> = Sets.newConcurrentHashSet()
 
         @Volatile var realTimeDataListener: (stockData: StockData) -> Unit = {}
 
         var dataSourceDelegate: DataSource = EmptyDataSourceImpl()
+
+        var data:RealTimeStockData = RealTimeStockData()
 
         fun addRealTimeDataListener(realTimeDataListener: (stockData: StockData) -> Unit) {
             this.realTimeDataListener = realTimeDataListener

@@ -10,8 +10,8 @@ import javax.swing.border.EmptyBorder
  * Created by test on 2016/7/16.
  */
 class ListItemView : ListItemForm {
-    val positiveRateColor = Color.red
-    val negativeRateColor = Color.green
+    val positiveRateColor: Color = Color.red
+    val negativeRateColor: Color = Color.green
     val fontColor: Color
 
     constructor(name: String, fontColor: Color) {
